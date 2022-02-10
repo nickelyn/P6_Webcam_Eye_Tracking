@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
 """
-Module Docstring
+Main module
 """
 
 
 def main():
-    """ Main entry point of the app """
     print("hello world")
 
 
