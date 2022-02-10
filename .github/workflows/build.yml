@@ -24,7 +24,7 @@ jobs:
 
     - name: Lint with flake8
       run: |
-      flake8 . --max-doc-length=72 --ignore=E211,E999,F401,F821,W503
+      flake8 --max-doc-length=72 --ignore=E211,E999,F401,F821,W503
 
     - name: Test
       run: |
