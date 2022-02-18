@@ -1,6 +1,7 @@
 import cv2
 import sys
 
+
 def findFace():
     # Get user supplied values
     imagePath = "C:\\Users\\Lasse\\Desktop\\AAU\\6. Semester\\Bachelor\\Code\\Images\\test5.JPG"
@@ -19,14 +20,14 @@ def findFace():
         scaleFactor=1.1,
         minNeighbors=5,
         minSize=(30, 30),
-        flags = cv2.CASCADE_SCALE_IMAGE
+        flags=cv2.CASCADE_SCALE_IMAGE,
     )
 
     print("Found {0} faces!".format(len(faces)))
 
     # Draw a rectangle around the faces
     for (x, y, w, h) in faces:
-        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     cv2.imshow("Faces found", image)
     cv2.waitKey(0)

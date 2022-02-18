@@ -1,5 +1,6 @@
 import cv2
 
+
 def streamWebcam():
 
     cv2.namedWindow("Webcam preview")
