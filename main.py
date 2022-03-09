@@ -1,5 +1,4 @@
-import EyeTracker
-import FaceDetection
+import eyegaze
 
-if __name__ == "__main__":
-    EyeTracker.streamWebcam()
+if __name__ == '__main__':
+    eyegaze.getFace()
