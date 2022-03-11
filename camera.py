@@ -12,4 +12,3 @@ class Camera:
         if not self.capture.isOpened():
             print("Could not access camera!")
             exit()
-
