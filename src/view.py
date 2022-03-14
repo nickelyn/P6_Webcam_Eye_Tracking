@@ -4,10 +4,11 @@ import argparse
 
 from camera import *
 from gui import *
-from capture import *   # TODO: Fix DLL issue? stable?
+from capture import *  # TODO: Fix DLL issue? stable?
 
 IMG_SIZE_W = 100
 IMG_SIZE_H = 100
+
 
 def main():
     gui = Gui()
@@ -24,7 +25,10 @@ def main():
 
         if event == "_TOGGLE_":
             _toggle = not _toggle
-            gui.window.Element('_TOGGLE_').Update(('Off','On')[_toggle], button_color=(('white', ('red', 'green')[_toggle])))
+            gui.window.Element("_TOGGLE_").Update(
+                ("Off", "On")[_toggle],
+                button_color=(("white", ("red", "green")[_toggle])),
+            )
 
             if _toggle:
                 cam.is_recording = True
@@ -33,7 +37,7 @@ def main():
             elif not _toggle:
                 cam.is_recording = False
                 gui.window["status"].update("Stopped")
-                #img = np.full((IMG_SIZE_H, IMG_SIZE_W), 255)
+                # img = np.full((IMG_SIZE_H, IMG_SIZE_W), 255)
 
         # Implement screen recording
         elif event == "Record":
@@ -41,9 +45,9 @@ def main():
             pass
 
         elif event == "Stop":
-            print("hello, you selected {}".format(event,values))
+            print("hello, you selected {}".format(event, values))
             pass
-        
+
         elif event == "Apply":
             wc = WindowCapture(values["SELECT"])
 
@@ -56,6 +60,7 @@ def main():
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             gui.window["frame"].update(data=imgbytes)
+
 
 if __name__ == "__main__":
     # Optional arguments if camera type is different from 0

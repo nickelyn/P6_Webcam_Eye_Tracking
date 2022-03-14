@@ -1,5 +1,6 @@
 import numpy as np
-import win32gui#, #win32ui,  win32con
+import win32gui  # , #win32ui,  win32con
+
 
 class WindowCapture:
     w = 0
@@ -18,7 +19,7 @@ class WindowCapture:
         else:
             self.hwnd = win32gui.FindWindow(None, window_name)
             if not self.hwnd:
-                raise Exception('Window not found: {}'.format(window_name))
+                raise Exception("Window not found: {}".format(window_name))
 
         # Get the window size
         window_rect = win32gui.GetWindowRect(self.hwnd)
@@ -45,11 +46,17 @@ class WindowCapture:
         dataBitMap = win32ui.CreateBitmap()
         dataBitMap.CreateCompatibleBitmap(dcObj, self.w, self.h)
         cDC.SelectObject(dataBitMap)
-        cDC.BitBlt((0, 0), (self.w, self.h), dcObj, (self.cropped_x, self.cropped_y), win32con.SRCCOPY)
+        cDC.BitBlt(
+            (0, 0),
+            (self.w, self.h),
+            dcObj,
+            (self.cropped_x, self.cropped_y),
+            win32con.SRCCOPY,
+        )
 
         # Converts raw data into a format opencv can read
         signedIntsArray = dataBitMap.GetBitmapBits(True)
-        img = np.fromstring(signedIntsArray, dtype='uint8')
+        img = np.fromstring(signedIntsArray, dtype="uint8")
         img.shape = (self.h, self.w, 4)
 
         # free up resources
@@ -58,7 +65,7 @@ class WindowCapture:
         win32gui.ReleaseDC(self.hwnd, wDC)
         win32gui.DeleteObject(dataBitMap.GetHandle())
 
-        img = img[...,:3]
+        img = img[..., :3]
 
         # https://github.com/opencv/opencv/issues/14866#issuecomment-580207109
         img = np.ascontiguousarray(img)
@@ -75,8 +82,9 @@ class WindowCapture:
 
         names = []
         win32gui.EnumWindows(winEnumHandler, None)
-        
-        return names 
+
+        return names
+
     # translate a pixel position on a screenshot image to a pixel position on the screen.
     def get_screen_position(self, pos):
         return (pos[0] + self.offset_x, pos[1] + self.offset_y)
