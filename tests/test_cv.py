@@ -4,7 +4,7 @@ import glob
 import numpy as np
 import cv2 as cv
 
-
+# TODO: Unable to test camera on VM. Check if actual user, if not dont run test
 class TestCV(unittest.TestCase):
     def setUp(self):
         capture = cv.VideoCapture(0)
