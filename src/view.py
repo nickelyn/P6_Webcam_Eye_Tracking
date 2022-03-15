@@ -13,7 +13,7 @@ IMG_SIZE_H = 100
 def main():
     device = args.camera
     gui = Gui()
-
+    cam = Camera(device)
     _toggle = False
 
     while True:
@@ -29,7 +29,6 @@ def main():
             )
 
             if _toggle:
-                cam = Camera(device)
                 cam.is_recording = True
                 gui.window["status"].update("Running")
 
@@ -39,14 +38,6 @@ def main():
                 # img = np.full((IMG_SIZE_H, IMG_SIZE_W), 255)
                 # TODO: "Kill" camera instance
 
-            if cam.is_recording:
-                ret, frame = cam.capture.read()
-                if not ret:
-                    print("Can't receive frame (stream end?). Exiting ...")
-                    break
-
-                imgbytes = cv2.imencode(".png", frame)[1].tobytes()
-                gui.window["frame"].update(data=imgbytes)
         # Implement screen recording
         elif event == "Record":
             frame = pyautogui.getWindowsWithTitle(values["SELECT"])
@@ -58,6 +49,14 @@ def main():
         elif event == "Stop":
             pass
 
+        if cam.is_recording:
+            ret, frame = cam.capture.read()
+            if not ret:
+                print("Can't receive frame (stream end?). Exiting ...")
+                break
+
+            imgbytes = cv2.imencode(".png", frame)[1].tobytes()
+            gui.window["frame"].update(data=imgbytes)
 
 if __name__ == "__main__":
     # Optional arguments if camera type is different from 0
