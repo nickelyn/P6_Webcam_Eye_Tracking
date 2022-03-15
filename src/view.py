@@ -49,7 +49,7 @@ def main():
                 gui.window["frame"].update(data=imgbytes)
         # Implement screen recording
         elif event == "Record":
-            frame =pyautogui.getWindowsWithTitle(values["SELECT"])
+            frame = pyautogui.getWindowsWithTitle(values["SELECT"])
             # frame = pyautogui.screenshot()
             # frame.save("test.png")
             # imgbytes = cv2.imencode(".png", frame)[1].tobytes()
