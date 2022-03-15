@@ -58,6 +58,7 @@ def main():
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             gui.window["frame"].update(data=imgbytes)
 
+
 if __name__ == "__main__":
     # Optional arguments if camera type is different from 0
     parser = argparse.ArgumentParser(description="webcam eye tracking.")
