@@ -20,7 +20,9 @@ def get_window_names():
 
     return names
 
+
 WINDOW_LIST = get_window_names()
+
 
 class Gui:
     THEME = "Dark"
