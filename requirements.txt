@@ -2,5 +2,5 @@ dlib==19.23.1
 numpy==1.22.3
 opencv_python==4.5.5.64
 PySimpleGUI==4.57.0
-pywin32==228
-win32gui==221.6
+pypiwin32
+win32gui
