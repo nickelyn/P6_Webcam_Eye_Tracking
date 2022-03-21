@@ -1,5 +1,5 @@
 import numpy as np
-import win32gui
+"""import win32gui
 
 
 class WindowCapture:
@@ -11,4 +11,4 @@ class WindowCapture:
         else:
             self.hwnd = win32gui.FindWindow(None, window_name)
             if not self.hwnd:
-                raise Exception("Window not found: {}".format(window_name))
+                raise Exception("Window not found: {}".format(window_name))"""
