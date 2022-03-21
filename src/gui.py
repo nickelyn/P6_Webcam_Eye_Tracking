@@ -18,7 +18,7 @@ APP_VERSION = "v0.1"
     return names
 """
 
-#WINDOW_LIST = get_window_names()
+# WINDOW_LIST = get_window_names()
 
 
 class Gui:
