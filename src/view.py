@@ -17,9 +17,9 @@ def main():
     while True:
         event, values = gui.window.read(timeout=50)
 
-        if cam.is_recording: # Only use features if camera is on
-            
-            # TODO: Implement features    
+        if cam.is_recording:  # Only use features if camera is on
+
+            # TODO: Implement features
             if values["_HEATMAP_"] == True:
                 print("_HEATMAP_")
 
@@ -37,15 +37,15 @@ def main():
             )
             if toggle:
                 cam.is_recording = True
-                cam.setsize(IMG_SIZE_W,IMG_SIZE_H)
+                cam.setsize(IMG_SIZE_W, IMG_SIZE_H)
                 gui.window["status"].update("Running")
             elif not toggle:
                 cam.is_recording = False
                 gui.window["status"].update("Stopped")
                 # TODO: Fix  opencv image size not correlating to numpy image size
                 img = np.full((IMG_SIZE_H, IMG_SIZE_W), 255)
-                imgbytes = cv2.imencode('.png', img)[1].tobytes()
-                gui.window['frame'].update(data=imgbytes)
+                imgbytes = cv2.imencode(".png", img)[1].tobytes()
+                gui.window["frame"].update(data=imgbytes)
 
         if cam.is_recording:
             ret, frame = cam.capture.read()

@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 
+
 class Camera:
     def __init__(self, device):
         self.device = device

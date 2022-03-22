@@ -45,9 +45,7 @@ def getFace():
             le_right_point = (landmarks.part(39).x, landmarks.part(39).y)
 
             # Finds the middle point between the horizontal line in the eye
-            le_center_top_point = findMidPoint(
-                landmarks.part(37), landmarks.part(38)
-            )
+            le_center_top_point = findMidPoint(landmarks.part(37), landmarks.part(38))
             le_center_bottom_point = findMidPoint(
                 landmarks.part(41), landmarks.part(40)
             )
@@ -59,9 +57,7 @@ def getFace():
             re_right_point = (landmarks.part(45).x, landmarks.part(45).y)
 
             # Finds the middle point between the horizontal line in the eye
-            re_center_top_point = findMidPoint(
-                landmarks.part(43), landmarks.part(44)
-            )
+            re_center_top_point = findMidPoint(landmarks.part(43), landmarks.part(44))
             re_center_bottom_point = findMidPoint(
                 landmarks.part(47), landmarks.part(46)
             )
@@ -121,17 +117,11 @@ def getFace():
 
             # Needs optimization, only works at a specific distance and that very well
             if ratio_LE > 4.7 and ratio_RE > 4.7:
-                cv2.putText(
-                    frame, "BOTH EYES CLOSED", (50, 150), font, 1, (0, 0, 255)
-                )
+                cv2.putText(frame, "BOTH EYES CLOSED", (50, 150), font, 1, (0, 0, 255))
             elif ratio_LE > 4.7:
-                cv2.putText(
-                    frame, "RIGHT EYE CLOSED", (50, 150), font, 1, (0, 0, 255)
-                )
+                cv2.putText(frame, "RIGHT EYE CLOSED", (50, 150), font, 1, (0, 0, 255))
             elif ratio_RE > 4.7:
-                cv2.putText(
-                    frame, "LEFT EYE CLOSED", (50, 150), font, 1, (0, 0, 255)
-                )
+                cv2.putText(frame, "LEFT EYE CLOSED", (50, 150), font, 1, (0, 0, 255))
 
             # Eye Gaze
             left_eye_outline = np.array(
@@ -178,9 +168,7 @@ def getFace():
             max_y = np.max(left_eye_outline[:, 1])
 
             gray_eye = left_eye[min_y:max_y, min_x:max_x]
-            _, threshold_eye = cv2.threshold(
-                gray_eye, 70, 255, cv2.THRESH_BINARY
-            )
+            _, threshold_eye = cv2.threshold(gray_eye, 70, 255, cv2.THRESH_BINARY)
 
             eye = cv2.resize(gray_eye, None, fx=5, fy=5)
             threshold_eye = cv2.resize(threshold_eye, None, fx=5, fy=5)
