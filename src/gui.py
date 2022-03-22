@@ -6,6 +6,9 @@ import win32gui
 APP_NAME = "Webcamera Usability Testing"
 APP_VERSION = "v0.1"
 
+# Base 64 images
+search_icon = b"iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVQ4T2NkwA2YgFL/8MiDpRjRFAgD+aVALAvEv4GYFYj/A/EcID6AzTBkA9SACrqBuAqIryIp5gSyq4H4ExB3oRsCMwBk01ogjgPiDzicXQMUPw/EW5HlYQZEQ528Co+fQZYsBeIwbAaA/JgLxN/xGACSmgbElUD8EaYO5oLFQIFYAppB0k1AvACI76EbMAUoUA/EbwkYMhcon4PsUpgLXIGCmkA8CY8BAlB5UEDDAXI0LgOKNgPxdSyGgBIVyPZ+IL6EywCQDbOBeAsQrwDin1CFulDv6UENmI7LAJA4yKYQIPYEYmYovgOkQaHvC8QzgTgfiEFhBgboSRmL61GEUtANIdUAkGkohpBjAMiQTCA2BOI0cg2A+wsAV68vEVbw9/oAAAAASUVORK5CYII="
+
 
 # Find the name of the window you're interested in.
 # https://stackoverflow.com/questions/55547940/how-to-get-a-list-of-the-name-of-every-open-window
@@ -25,18 +28,26 @@ WINDOW_LIST = get_window_names()
 
 
 class Gui:
-    THEME = "Dark"
+    """
+    GUI Class
+
+    Used to execute the interface
+    """
+
+    THEME = "Dark Grey"
+    HEADER_FONT = "Dosis 14 bold"
+    DEFAULT_FONT = "Dosis 12"
     sg.theme(THEME)
 
-    camera_feed = [[sg.Image(filename="", key="frame", size=(200, 200))]]
+    camera_feed = [[sg.Image(filename="", key="frame")]]
 
-    window_feed = [[sg.Image(filename="", key="window", size=(200, 200))]]
+    window_feed = [[sg.Image(filename="", key="window")]]
 
     toggle = [
-        [sg.Text("Turn webcam On/Off")],
+        [sg.Text("Webcam", font=HEADER_FONT)],
         [
             sg.Button(
-                "Off",
+                "OFF",
                 size=(5, 1),
                 button_color=("white", "red"),
                 key="_TOGGLE_",
@@ -45,34 +56,46 @@ class Gui:
     ]
 
     button_controls = [
-        [sg.Text("Status:"), sg.Text("", key="status")],
+        [sg.Text("Status:", font=HEADER_FONT), sg.Text("", key="status")],
         [sg.Button("Record"), sg.Button("Stop")],
     ]
 
     select_window = [
-        [sg.Text("Current window:"), sg.Text("", key="current_window")],
+        [
+            sg.Text("Current window:", font=HEADER_FONT),
+            sg.Text("", key="current_window"),
+        ],
         [
             sg.Combo(
                 WINDOW_LIST,
                 enable_events=True,
                 readonly=True,
-                font="Consolas 10",
+                font=DEFAULT_FONT,
                 key="SELECT",
-            )
+                size=(25, 1),
+            ),
+            sg.Button("Apply"),
         ],
-        [sg.Button("Apply")],
     ]
 
-    # TODO: add search bar and scrollbar
     left_col = [
-        [sg.Text("Features", size=(25, 1))],
-        [sg.Input(size=(25, 1), focus=False)],
-        [sg.Checkbox("Generate Heatmap", default=False)],
-        [sg.Checkbox("Show facial recognition", default=False)],
-        [sg.Checkbox("Generate Heatmap", default=False)],
-        [sg.Checkbox("Show facial recognition", default=False)],
-        [sg.Checkbox("Show FPS", default=False)],
+        [sg.Text("Features", size=(20, 1), font=HEADER_FONT)],
+        [sg.Input(size=(25, 1), focus=False), sg.Image(search_icon)],
+        [sg.Checkbox("Generate Heatmap", default=True, key="_HEATMAP_")],
+        [
+            sg.Checkbox(
+                "Show facial recognition", default=False, key="_FACIAL_RECOGNITION_"
+            )
+        ],
+        [sg.Checkbox("Show FPS", default=True, key="_FPS_")],
+        [sg.Checkbox("4", default=False)],
+        [sg.Checkbox("5", default=False)],
+        [sg.Checkbox("6", default=False)],
+        [sg.Checkbox("7", default=False)],
+        [sg.Checkbox("8", default=False)],
+        [sg.Checkbox("9", default=False)],
     ]
+
     right_col = [
         [sg.Column(camera_feed, justification="center")],
         [sg.Column(window_feed)],
@@ -86,7 +109,7 @@ class Gui:
     def __init__(self) -> None:
         self.layout = [
             [
-                sg.Column(self.left_col),
+                sg.vtop(sg.Column(self.left_col)),
                 sg.VSeperator(),
                 sg.Column(self.right_col),
             ]
@@ -96,8 +119,7 @@ class Gui:
             "{} {}".format(APP_NAME, APP_VERSION),
             self.layout,
             default_button_element_size=(12, 1),
-            auto_size_buttons=False,
-            resizable=True,
-            element_justification="center",
-            font="Helvetica 16",
+            auto_size_buttons=True,
+            resizable=False,
+            font=self.DEFAULT_FONT,
         )
