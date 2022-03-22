@@ -1,6 +1,7 @@
+dlib==19.23.1
 numpy==1.22.3
 opencv_python==4.5.5.64
 pyautogui==0.9.53
 PySimpleGUI==4.57.0
-Pillow==9.0.1
-PyGetWindow==0.0.9
+pypiwin32
+win32gui
