@@ -69,7 +69,7 @@ def main():
 
         if event == "Exit" or event == sg.WIN_CLOSED:
             gui.window.close()
-            exit(0)
+            return
 
 
 if __name__ == "__main__":
