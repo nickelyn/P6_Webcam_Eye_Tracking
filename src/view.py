@@ -1,10 +1,12 @@
-import numpy as np
-import cv2
+import io
 import argparse
+import pygetwindow
 from camera import *
 from gui import *
 from capture import *
 import pyautogui
+from window import Window
+from PIL import Image
 
 IMG_SIZE_W = 400
 IMG_SIZE_H = 400
@@ -12,10 +14,24 @@ IMG_SIZE_H = 400
 
 def main():
     toggle = False
+    window_capture = Window("")
+    titles_found = False
+    capture_window = False
+    sentinel = 0
 
     # Event Loop
     while True:
         event, values = gui.window.read(timeout=50)
+
+        if not titles_found:
+            titles_list = window_capture.get_windows_titles_list()
+            for title in titles_list:
+                w = pygetwindow.getWindowsWithTitle(title)[0]
+                print(len(w.title))
+                if w.isMinimized or len(title) == 0:
+                    titles_list.remove(title)
+            gui.window["SELECT"].update(values=titles_list, visible=True)
+            titles_found = True
 
         if cam.is_recording:  # Only use features if camera is on
 
@@ -54,7 +70,21 @@ def main():
                 break
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
-            gui.window["frame"].update(data=imgbytes)
+            gui.window["window"].update(data=imgbytes)
+
+        if capture_window:
+            if sentinel > 20:
+                combo = values["SELECT"]
+                window = Window(combo)
+                path = "ressources/windowfeed/windowfeed.png"
+                window.take_screenshot_of_window(path)
+                img = Image.open("ressources/windowfeed/windowfeed.png")
+                img.thumbnail((400, 400))
+                bio = io.BytesIO()
+                img.save(bio, format="PNG")
+                gui.window["frame"].update(data=bio.getvalue())
+                sentinel = 0
+            sentinel = sentinel + 1
 
         # TODO: Implement window capture
         elif event == "Record":
@@ -63,6 +93,13 @@ def main():
             # frame.save("test.png")
             # imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             # gui.window["frame"].update(data=imgbytes)
+
+        elif event == "Apply":
+            if capture_window:
+                capture_window = False
+            else:
+                capture_window = True
+            print(capture_window)
 
         elif event == "Stop":
             pass
