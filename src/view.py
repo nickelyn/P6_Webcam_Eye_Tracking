@@ -1,4 +1,5 @@
 import io
+import os
 import argparse
 import pygetwindow
 from camera import *
@@ -27,7 +28,7 @@ def main():
             titles_list = window_capture.get_windows_titles_list()
             for title in titles_list:
                 w = pygetwindow.getWindowsWithTitle(title)[0]
-                print(len(w.title))
+                # print(len(w.title))
                 if w.isMinimized or len(title) == 0:
                     titles_list.remove(title)
             gui.window["SELECT"].update(values=titles_list, visible=True)
@@ -76,15 +77,21 @@ def main():
             if sentinel > 20:
                 combo = values["SELECT"]
                 window = Window(combo)
-                path = "ressources/windowfeed/windowfeed.png"
-                window.take_screenshot_of_window(path)
-                img = Image.open("ressources/windowfeed/windowfeed.png")
-                img.thumbnail((400, 400))
-                bio = io.BytesIO()
-                img.save(bio, format="PNG")
-                gui.window["frame"].update(data=bio.getvalue())
-                sentinel = 0
-            sentinel = sentinel + 1
+                try:
+                    dir = "resources/windowfeed/"
+                    file_name = "windowfeed.png"
+                    path = os.path.join(dir, file_name)
+                    window.take_screenshot_of_window(path)
+                    img = Image.open(path)
+                    img.thumbnail((400, 400))
+                    bio = io.BytesIO()
+                    img.save(bio, format="PNG")
+                    gui.window["frame"].update(data=bio.getvalue())
+                    sentinel = 0
+                except FileNotFoundError:
+                    print("File not found")
+                    os.makedirs(dir)
+            sentinel += 1
 
         # TODO: Implement window capture
         elif event == "Record":
@@ -93,13 +100,12 @@ def main():
             # frame.save("test.png")
             # imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             # gui.window["frame"].update(data=imgbytes)
-
+            
         elif event == "Apply":
             if capture_window:
                 capture_window = False
             else:
                 capture_window = True
-            print(capture_window)
 
         elif event == "Stop":
             pass
