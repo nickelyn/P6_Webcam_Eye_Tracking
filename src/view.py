@@ -82,7 +82,7 @@ def main():
                     path = os.path.join(dir, file_name)
                     window.take_screenshot_of_window(path)
                     img = Image.open(path)
-                    img.thumbnail((400, 400)) # TODO: Implement size scaling
+                    img.thumbnail((400, 400))  # TODO: Implement size scaling
                     bio = io.BytesIO()
                     img.save(bio, format="PNG")
                     gui.window["frame"].update(data=bio.getvalue())
@@ -92,14 +92,16 @@ def main():
                     os.makedirs(dir)
             sentinel += 1
 
-        elif event == "Record": # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
+        elif (
+            event == "Record"
+        ):  # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
             frame = pyautogui.getWindowsWithTitle(values["SELECT"])
             gui.window.minimize()
             # frame = pyautogui.screenshot()
             # frame.save("test.png")
             # imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             # gui.window["frame"].update(data=imgbytes)
-            
+
         elif event == "Apply":
             if capture_window:
                 capture_window = False

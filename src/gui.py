@@ -9,6 +9,7 @@ search_icon = b"iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVQ4T2NkwA2Y
 
 WINDOW_LIST = list()
 
+
 class Gui:
     """
     GUI Class
