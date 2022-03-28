@@ -65,11 +65,7 @@ class Gui:
         [sg.Text("Features", size=(20, 1), font=HEADER_FONT)],
         [sg.Input(size=(25, 1), focus=False), sg.Image(search_icon)],
         [sg.Checkbox("Generate Heatmap", default=True, key="_HEATMAP_")],
-        [
-            sg.Checkbox(
-                "Facial detection", default=False, key="_FACIAL_DETECTION_"
-            )
-        ],
+        [sg.Checkbox("Facial detection", default=False, key="_FACIAL_DETECTION_")],
         [sg.Checkbox("Show FPS", default=True, key="_FPS_")],
         [sg.Checkbox("4", default=False)],
         [sg.Checkbox("5", default=False)],
