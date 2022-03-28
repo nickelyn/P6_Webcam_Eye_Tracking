@@ -21,7 +21,9 @@ class DistanceDetector:
         self.distance = 0
         self.focal_length_found = 0
         self.ref_image_face_width = 0
-        self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+        self.face_detector = cv2.CascadeClassifier(
+            cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+        )
         self.fonts = cv2.FONT_HERSHEY_COMPLEX
 
     def get_ref_image_face_width(self, ref_image_path):
@@ -29,12 +31,16 @@ class DistanceDetector:
         self.ref_image_face_width = face_data(ref_image, self.face_detector)
 
     def find_focal_length(self, ref_distance: int):
-        self.focal_length_found = Focal_Length_Finder(Known_distance, Known_width, ref_distance)
+        self.focal_length_found = Focal_Length_Finder(
+            Known_distance, Known_width, ref_distance
+        )
 
     def get_distance_actual(self, frame):
         face_width_in_frame = face_data(frame, self.face_detector)
         if face_width_in_frame != 0:
-            self.distance = Distance_finder(self.focal_length_found, Known_width, face_width_in_frame)
+            self.distance = Distance_finder(
+                self.focal_length_found, Known_width, face_width_in_frame
+            )
         else:
             self.distance = 0
 

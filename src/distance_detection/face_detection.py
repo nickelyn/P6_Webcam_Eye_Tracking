@@ -70,7 +70,8 @@ ref_image_face_width = face_data(ref_image)
 # Known_distance(centimeters),
 # known_width(centimeters)
 Focal_length_found = Focal_Length_Finder(
-    Known_distance, Known_width, ref_image_face_width)
+    Known_distance, Known_width, ref_image_face_width
+)
 
 print(Focal_length_found)
 
@@ -100,8 +101,7 @@ while True:
         # these arguments the Focal_Length,
         # Known_width(centimeters),
         # and Known_distance(centimeters)
-        Distance = Distance_finder(
-            Focal_length_found, Known_width, face_width_in_frame)
+        Distance = Distance_finder(Focal_length_found, Known_width, face_width_in_frame)
 
         # draw line as background of text
         cv2.line(frame, (30, 30), (230, 30), RED, 32)
@@ -109,8 +109,8 @@ while True:
 
         # Drawing Text on the screen
         cv2.putText(
-            frame, f"Distance: {round(Distance, 2)} CM", (30, 35),
-            fonts, 0.6, GREEN, 2)
+            frame, f"Distance: {round(Distance, 2)} CM", (30, 35), fonts, 0.6, GREEN, 2
+        )
 
     # show the frame on the screen
     cv2.imshow("frame", frame)
