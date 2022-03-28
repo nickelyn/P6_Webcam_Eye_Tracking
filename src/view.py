@@ -93,7 +93,7 @@ def main():
             sentinel += 1
 
         # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
-        elif event == "Record":  
+        elif event == "Record":
             frame = pyautogui.getWindowsWithTitle(values["SELECT"])
             gui.window.minimize()
             # frame = pyautogui.screenshot()
