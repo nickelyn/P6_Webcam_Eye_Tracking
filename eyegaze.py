@@ -96,12 +96,10 @@ def getFace():
 
             #Find the length of the vertical line for the right and left eye
             re_vertical_line_len = getVerticalLen(re_center_top_point[0], re_center_top_point[1], re_center_bottom_point[0], re_center_bottom_point[1])
-
             le_vertical_line_len = getVerticalLen(le_center_top_point[0], le_center_bottom_point[0], le_center_top_point[1], le_center_bottom_point[1])
 
             #Find the length of the horizontal line for right and left eye
             re_horizontal_line_len = getVerticalLen(re_left_point[0], re_right_point[0], re_left_point[1], re_right_point[1])
-
             le_horizontal_line_len = getVerticalLen(le_left_point[0], le_right_point[0], le_left_point[1], le_right_point[1])
 
             #Calculate the ratio between eye height and width
@@ -152,13 +150,13 @@ def getFace():
             cv2.imshow("Threshold", threshold_eye)
             heightShape, widthShape = threshold_eye.shape
 
-            #Split the eye in 2 sides (left and right)
+            # Split the eye in 2 sides (left and right)
             left_side_threshold = threshold_eye[0: heightShape, 0: int(widthShape/2)]
             left_side_white = cv2.countNonZero(left_side_threshold)
             right_side_threshold = threshold_eye[0: height, int(widthShape/2): widthShape]
             right_side_white = cv2.countNonZero(right_side_threshold)
 
-            #Calculate the gaze ratio
+            # Calculate the gaze ratio
             gaze_ratio = (left_side_white + np.finfo(float).eps)/(right_side_white + np.finfo(float).eps)
             #Put ratio in the webcam feed
             cv2.putText(frame, str(gaze_ratio), (50, 100), font, 2, (0, 255, 0), 3)
@@ -166,14 +164,10 @@ def getFace():
             threshold_eye = cv2.resize(threshold_eye, None, fx=5, fy=5)
             eye = cv2.resize(gray_eye, None, fx=5, fy=5)
 
-            #cv2.imshow("Left", left_side_threshold)
-            #cv2.imshow("Right", right_side_threshold)
-
             #Show the webcam feed
             cv2.imshow("Webcam feed", frame)
-        #Option - press esc to quit the feed
-        key = cv2.waitKey(1)
-        if key == 27:
+        
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     camFeed.release()
