@@ -92,9 +92,8 @@ def main():
                     os.makedirs(dir)
             sentinel += 1
 
-        elif (
-            event == "Record"
-        ):  # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
+        # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
+        elif event == "Record":  
             frame = pyautogui.getWindowsWithTitle(values["SELECT"])
             gui.window.minimize()
             # frame = pyautogui.screenshot()
