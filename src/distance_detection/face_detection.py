@@ -3,11 +3,11 @@ import cv2
 
 # distance from camera to object(face) measured
 # centimeter
-Known_distance = 35
+Known_distance = 60
 
 # width of face in the real world or Object Plane
 # centimeter
-Known_width = 10
+Known_width = 16
 
 # Colors
 GREEN = (0, 255, 0)
@@ -60,7 +60,7 @@ def face_data(image):
 
 
 # reading reference_image from directory
-ref_image = cv2.imread("Ref_image.jpg")
+ref_image = cv2.imread("Ref_image_new.jpg")
 
 # find the face width(pixels) in the reference_image
 ref_image_face_width = face_data(ref_image)

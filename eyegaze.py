@@ -3,6 +3,9 @@ import numpy as np
 import dlib
 from math import hypot
 
+from src.distance_detection.distance_detector import DistanceDetector
+import src.distance_detection.distance_detector as dt
+
 
 def findMidPoint(p1, p2):
     return int((p1.x + p2.x)/2), int((p1.y + p2.y)/2)
@@ -40,6 +43,10 @@ def createMask(height, width, gray, eye_outline):
     return left_eye
 
 def getFace():
+    distance_detector = DistanceDetector()
+    ref_image = cv2.imread("src/distance_detection/Ref_image_new.jpg")
+    ref_image_fact_width = dt.face_data(ref_image, distance_detector.face_detector)
+    distance_detector.find_focal_length(ref_image_fact_width)
 
     detector = setDetector()
 
@@ -51,8 +58,9 @@ def getFace():
     while True:
         _, frame = camFeed.read()
         # Turn the feed into grayscale
+        distance_detector.get_distance_actual(frame)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
+        distance_found = distance_detector.distance
         # Get an array of faces from webcam feed
         faces = detector(gray)
 
