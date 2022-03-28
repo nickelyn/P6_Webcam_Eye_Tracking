@@ -7,6 +7,7 @@ from gui import *
 import pyautogui
 from window import Window
 from PIL import Image
+from eyegaze import *
 
 IMG_SIZE_W = 400
 IMG_SIZE_H = 400
@@ -34,13 +35,20 @@ def main():
             titles_found = True
 
         if cam.is_recording:  # Only use features if camera is on
+            ret, frame = cam.capture.read()
+            #if not ret:
+            #    print("Can't receive frame (stream end?). Exiting ...")
+            #    break
+            if values["_FACIAL_DETECTION_"] == True:
+                getFace(frame)
+
+            imgbytes = cv2.imencode(".png", frame)[1].tobytes()
+            gui.window["window"].update(data=imgbytes)
 
             # TODO: Implement features
             if values["_HEATMAP_"] == True:
                 print("_HEATMAP_")
 
-            if values["_FACIAL_RECOGNITION_"] == True:
-                print("_FACIAL_RECOGNITION_")
 
             if values["_FPS_"] == True:
                 print("_FPS_")
@@ -62,15 +70,6 @@ def main():
                 img = np.full((IMG_SIZE_H, IMG_SIZE_W), 255)
                 imgbytes = cv2.imencode(".png", img)[1].tobytes()
                 gui.window["window"].update(data=imgbytes)
-
-        if cam.is_recording:
-            ret, frame = cam.capture.read()
-            if not ret:
-                print("Can't receive frame (stream end?). Exiting ...")
-                break
-
-            imgbytes = cv2.imencode(".png", frame)[1].tobytes()
-            gui.window["window"].update(data=imgbytes)
 
         if capture_window:
             if sentinel > 20:
@@ -127,6 +126,7 @@ if __name__ == "__main__":
     # Instantiate GUI and Camera Class
     gui = Gui()
     cam = Camera(device)
-
+    #distance_detector = DistanceDetector()
+    
     main()
     # pyinstaller -c -F view.spec -y

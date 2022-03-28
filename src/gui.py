@@ -67,7 +67,7 @@ class Gui:
         [sg.Checkbox("Generate Heatmap", default=True, key="_HEATMAP_")],
         [
             sg.Checkbox(
-                "Show facial recognition", default=False, key="_FACIAL_RECOGNITION_"
+                "Facial detection", default=False, key="_FACIAL_DETECTION_"
             )
         ],
         [sg.Checkbox("Show FPS", default=True, key="_FPS_")],
@@ -108,4 +108,4 @@ class Gui:
             font=self.DEFAULT_FONT,
         )
 
-        self.window.maximize()
+        # self.window.maximize() Looks odd
