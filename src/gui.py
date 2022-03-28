@@ -1,7 +1,8 @@
 import re
 import PySimpleGUI as sg
 from capture import *
-#import win32gui
+
+# import win32gui
 
 APP_NAME = "Webcamera Usability Testing"
 APP_VERSION = "v0.1"
@@ -12,16 +13,16 @@ search_icon = b"iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVQ4T2NkwA2Y
 
 # Find the name of the window you're interested in.
 # https://stackoverflow.com/questions/55547940/how-to-get-a-list-of-the-name-of-every-open-window
-#def get_window_names():
-   # def winEnumHandler(hwnd, ctx):
-        #if win32gui.IsWindowVisible(hwnd):
-            #if win32gui.GetWindowText(hwnd) != "":
-               # names.append(win32gui.GetWindowText(hwnd))
+# def get_window_names():
+# def winEnumHandler(hwnd, ctx):
+# if win32gui.IsWindowVisible(hwnd):
+# if win32gui.GetWindowText(hwnd) != "":
+# names.append(win32gui.GetWindowText(hwnd))
 
-   # names = []
-   # win32gui.EnumWindows(winEnumHandler, None)
+# names = []
+# win32gui.EnumWindows(winEnumHandler, None)
 #
-   # return names
+# return names
 
 
 WINDOW_LIST = list()
