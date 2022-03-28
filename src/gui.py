@@ -1,32 +1,13 @@
 import re
 import PySimpleGUI as sg
-from capture import *
-
-# import win32gui
 
 APP_NAME = "Webcamera Usability Testing"
 APP_VERSION = "v0.1"
 
-# Base 64 images
 search_icon = b"iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVQ4T2NkwA2YgFL/8MiDpRjRFAgD+aVALAvEv4GYFYj/A/EcID6AzTBkA9SACrqBuAqIryIp5gSyq4H4ExB3oRsCMwBk01ogjgPiDzicXQMUPw/EW5HlYQZEQ528Co+fQZYsBeIwbAaA/JgLxN/xGACSmgbElUD8EaYO5oLFQIFYAppB0k1AvACI76EbMAUoUA/EbwkYMhcon4PsUpgLXIGCmkA8CY8BAlB5UEDDAXI0LgOKNgPxdSyGgBIVyPZ+IL6EywCQDbOBeAsQrwDin1CFulDv6UENmI7LAJA4yKYQIPYEYmYovgOkQaHvC8QzgTgfiEFhBgboSRmL61GEUtANIdUAkGkohpBjAMiQTCA2BOI0cg2A+wsAV68vEVbw9/oAAAAASUVORK5CYII="
 
 
-# Find the name of the window you're interested in.
-# https://stackoverflow.com/questions/55547940/how-to-get-a-list-of-the-name-of-every-open-window
-# def get_window_names():
-# def winEnumHandler(hwnd, ctx):
-# if win32gui.IsWindowVisible(hwnd):
-# if win32gui.GetWindowText(hwnd) != "":
-# names.append(win32gui.GetWindowText(hwnd))
-
-# names = []
-# win32gui.EnumWindows(winEnumHandler, None)
-#
-# return names
-
-
 WINDOW_LIST = list()
-
 
 class Gui:
     """
@@ -119,8 +100,11 @@ class Gui:
         self.window = sg.Window(
             "{} {}".format(APP_NAME, APP_VERSION),
             self.layout,
+            finalize=True,
             default_button_element_size=(12, 1),
             auto_size_buttons=True,
             resizable=False,
             font=self.DEFAULT_FONT,
         )
+
+        self.window.maximize()

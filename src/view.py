@@ -4,7 +4,6 @@ import argparse
 import pygetwindow
 from camera import *
 from gui import *
-from capture import *
 import pyautogui
 from window import Window
 from PIL import Image
@@ -62,7 +61,7 @@ def main():
                 # TODO: Fix  opencv image size not correlating to numpy image size
                 img = np.full((IMG_SIZE_H, IMG_SIZE_W), 255)
                 imgbytes = cv2.imencode(".png", img)[1].tobytes()
-                gui.window["frame"].update(data=imgbytes)
+                gui.window["window"].update(data=imgbytes)
 
         if cam.is_recording:
             ret, frame = cam.capture.read()
@@ -83,7 +82,7 @@ def main():
                     path = os.path.join(dir, file_name)
                     window.take_screenshot_of_window(path)
                     img = Image.open(path)
-                    img.thumbnail((400, 400))
+                    img.thumbnail((400, 400)) # TODO: Implement size scaling
                     bio = io.BytesIO()
                     img.save(bio, format="PNG")
                     gui.window["frame"].update(data=bio.getvalue())
@@ -93,9 +92,9 @@ def main():
                     os.makedirs(dir)
             sentinel += 1
 
-        # TODO: Implement window capture
-        elif event == "Record":
+        elif event == "Record": # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
             frame = pyautogui.getWindowsWithTitle(values["SELECT"])
+            gui.window.minimize()
             # frame = pyautogui.screenshot()
             # frame.save("test.png")
             # imgbytes = cv2.imencode(".png", frame)[1].tobytes()
