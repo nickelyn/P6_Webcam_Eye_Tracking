@@ -8,6 +8,7 @@ import pyautogui
 from window import Window
 from PIL import Image
 from eyegaze import *
+import platform as p
 
 IMG_SIZE_W = 400
 IMG_SIZE_H = 400
@@ -26,11 +27,12 @@ def main():
 
         if not titles_found:
             titles_list = window_capture.get_windows_titles_list()
-            for title in titles_list:
-                w = pygetwindow.getWindowsWithTitle(title)[0]
-                # print(len(w.title))
-                if w.isMinimized or len(title) == 0:
-                    titles_list.remove(title)
+            if p.system() != "Darwin":
+                for title in titles_list:
+                    w = pygetwindow.getWindowsWithTitle(title)[0]
+                    # print(len(w.title))
+                    if w.isMinimized or len(title) == 0:
+                        titles_list.remove(title)
             gui.window["SELECT"].update(values=titles_list, visible=True)
             titles_found = True
 
