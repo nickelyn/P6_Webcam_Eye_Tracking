@@ -73,9 +73,11 @@ def main():
                 gui.window["window"].update(data=imgbytes)
 
         if capture_window:
-            if p.system() == "Darwin": #TODO: Find different approach
+            if p.system() == "Darwin":  # TODO: Find different approach
                 if sentinel > 20:
-                    path = os.path.join(os.getcwd(), "../resources/windowfeed/windowfeed.png")
+                    path = os.path.join(
+                        os.getcwd(), "../resources/windowfeed/windowfeed.png"
+                    )
                     combo = values["SELECT"]
                     window = Window(combo)
                     print(combo)
