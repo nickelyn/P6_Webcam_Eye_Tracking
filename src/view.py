@@ -73,24 +73,39 @@ def main():
                 gui.window["window"].update(data=imgbytes)
 
         if capture_window:
-            if sentinel > 20:
-                combo = values["SELECT"]
-                window = Window(combo)
-                try:
-                    dir = "resources/windowfeed/"
-                    file_name = "windowfeed.png"
-                    path = os.path.join(dir, file_name)
-                    window.take_screenshot_of_window(path)
+            if p.system() == "Darwin": #TODO: Find different approach
+                if sentinel > 20:
+                    path = os.path.join(os.getcwd(), "../resources/windowfeed/windowfeed.png")
+                    combo = values["SELECT"]
+                    window = Window(combo)
+                    print(combo)
+                    window.take_screenshot_of_window_mac(path)
                     img = Image.open(path)
-                    img.thumbnail((400, 400))  # TODO: Implement size scaling
+                    img.thumbnail((200, 200))
                     bio = io.BytesIO()
                     img.save(bio, format="PNG")
                     gui.window["frame"].update(data=bio.getvalue())
                     sentinel = 0
-                except FileNotFoundError:
-                    print("File not found")
-                    os.makedirs(dir)
-            sentinel += 1
+                sentinel = sentinel + 1
+            else:
+                if sentinel > 20:
+                    combo = values["SELECT"]
+                    window = Window(combo)
+                    try:
+                        dir = "resources/windowfeed/"
+                        file_name = "windowfeed.png"
+                        path = os.path.join(dir, file_name)
+                        window.take_screenshot_of_window(path)
+                        img = Image.open(path)
+                        img.thumbnail((400, 400))  # TODO: Implement size scaling
+                        bio = io.BytesIO()
+                        img.save(bio, format="PNG")
+                        gui.window["frame"].update(data=bio.getvalue())
+                        sentinel = 0
+                    except FileNotFoundError:
+                        print("File not found")
+                        os.makedirs(dir)
+                sentinel += 1
 
         # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
         elif event == "Record":

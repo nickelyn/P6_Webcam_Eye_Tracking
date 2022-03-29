@@ -25,3 +25,14 @@ class Window:
         im = Image.open(path)
         im = im.crop((x0.x, x0.y, x2, y2))
         im.save(path)
+
+    def take_screenshot_of_window_mac(self, path: str):
+        x1, y1, width, height = pygetwindow.getWindowGeometry(self.name)
+        x2 = x1 + width
+        y2 = y1 + height
+        pyautogui.screenshot(path)
+        print(f"x1 = {x1}, x2 = {x2}, y1 = {y1}, y2 = {y2}")
+
+        im = Image.open(path)
+        im = im.crop((x1, y1+35, x2+570, y2))
+        im.save(path)
