@@ -36,7 +36,9 @@ def getRatio(horizontal, vertical):
     return horizontal / vertical
 
 
-def getVerticalLen(centertoppoint1, centertoppoint2, centerbottompoint1, centerbottompoint2):
+def getVerticalLen(
+    centertoppoint1, centertoppoint2, centerbottompoint1, centerbottompoint2
+):
     vertical_line_len = hypot(
         (centertoppoint1 - centerbottompoint1), (centertoppoint2 - centerbottompoint2)
     )
@@ -64,14 +66,12 @@ def lines_in_left_eye(frame, points):
         1,
     )
 
+
 def lines_in_right_eye(frame, points):
     # Create the horizontal and vertical line (left eye)
-    re_horizontal_line = cv2.line(
-        frame, points[4], points[5], (0, 255, 0), 1
-    )
-    re_vertical_line = cv2.line(
-        frame, points[6], points[7], (0, 255, 0), 1
-    )
+    re_horizontal_line = cv2.line(frame, points[4], points[5], (0, 255, 0), 1)
+    re_vertical_line = cv2.line(frame, points[6], points[7], (0, 255, 0), 1)
+
 
 def find_points_in_eye(landmarks):
     le_left_point = (landmarks.part(36).x, landmarks.part(36).y)
@@ -89,5 +89,13 @@ def find_points_in_eye(landmarks):
     re_center_top_point = findMidPoint(landmarks.part(43), landmarks.part(44))
     re_center_bottom_point = findMidPoint(landmarks.part(47), landmarks.part(46))
 
-    return [le_left_point, le_right_point, le_center_top_point, le_center_bottom_point, re_left_point, re_right_point,
-            re_center_top_point, re_center_bottom_point]
+    return [
+        le_left_point,
+        le_right_point,
+        le_center_top_point,
+        le_center_bottom_point,
+        re_left_point,
+        re_right_point,
+        re_center_top_point,
+        re_center_bottom_point,
+    ]

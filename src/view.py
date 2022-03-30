@@ -48,8 +48,9 @@ def main():
             gaze = gz.prepare_gaze_object(gaze, frame)
             if values["_LELINES_"] or values["_RELINES_"]:
                 # getFace(frame) OLD IMPLEMENTATION
-                gz.handle_faces(gaze, frame, lle=values["_LELINES_"], lre=values["_RELINES_"])
-
+                gz.handle_faces(
+                    gaze, frame, lle=values["_LELINES_"], lre=values["_RELINES_"]
+                )
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             gui.window["window"].update(data=imgbytes)
