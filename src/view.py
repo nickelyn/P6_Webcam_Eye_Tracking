@@ -2,6 +2,9 @@ import io
 import os
 import argparse
 import pygetwindow
+import src.gaze as gz
+
+from src.gaze import Gaze
 from camera import *
 from gui import *
 import pyautogui
@@ -20,6 +23,7 @@ def main():
     titles_found = False
     capture_window = False
     sentinel = 0
+    gaze = Gaze()
 
     # Event Loop
     while True:
@@ -41,8 +45,11 @@ def main():
             # if not ret:
             #    print("Can't receive frame (stream end?). Exiting ...")
             #    break
-            if values["_FACIAL_DETECTION_"] == True:
-                getFace(frame)
+            gaze = gz.prepare_gaze_object(gaze, frame)
+            if values["_LELINES_"] or values["_RELINES_"]:
+                # getFace(frame) OLD IMPLEMENTATION
+                gz.handle_faces(gaze, frame, lle=values["_LELINES_"], lre=values["_RELINES_"])
+
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             gui.window["window"].update(data=imgbytes)
@@ -74,13 +81,12 @@ def main():
 
         if capture_window:
             if p.system() == "Darwin":  # TODO: Find different approach
-                if sentinel > 20:
+                if sentinel > 50:
                     path = os.path.join(
                         os.getcwd(), "../resources/windowfeed/windowfeed.png"
                     )
                     combo = values["SELECT"]
                     window = Window(combo)
-                    print(combo)
                     window.take_screenshot_of_window_mac(path)
                     img = Image.open(path)
                     img.thumbnail((200, 200))
