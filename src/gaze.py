@@ -27,7 +27,9 @@ class Gaze:
         self.faces = self.detector(self.grey)
 
     def find_ref_image_width(self):
-        self.ref_image_width = dt.face_data(self.ref_image, self.distance_detector.face_detector)
+        self.ref_image_width = dt.face_data(
+            self.ref_image, self.distance_detector.face_detector
+        )
         self.distance_detector.find_focal_length(self.ref_image_width)
 
     def find_landmarks(self, face):
@@ -49,7 +51,7 @@ def getRatio(horizontal, vertical):
 
 
 def getVerticalLen(
-        centertoppoint1, centertoppoint2, centerbottompoint1, centerbottompoint2
+    centertoppoint1, centertoppoint2, centerbottompoint1, centerbottompoint2
 ):
     vertical_line_len = hypot(
         (centertoppoint1 - centerbottompoint1), (centertoppoint2 - centerbottompoint2)
@@ -57,7 +59,16 @@ def getVerticalLen(
     return vertical_line_len
 
 
-def handle_faces(gaze: Gaze, frame, lle=False, lre=False, closed=False, outline=False, ratio=False, distance=False):
+def handle_faces(
+    gaze: Gaze,
+    frame,
+    lle=False,
+    lre=False,
+    closed=False,
+    outline=False,
+    ratio=False,
+    distance=False,
+):
     outlines = list()
     for face in gaze.faces:
         gaze.find_landmarks(face)
@@ -205,14 +216,14 @@ def calculate_ratio(frame, outlines: list, gaze: Gaze):
     heightShape, widthShape = threshold_eye.shape
 
     # Split the eye in 2 sides (left and right)
-    left_side_threshold = threshold_eye[0:heightShape, 0: int(widthShape / 2)]
+    left_side_threshold = threshold_eye[0:heightShape, 0 : int(widthShape / 2)]
     left_side_white = cv2.countNonZero(left_side_threshold)
-    right_side_threshold = threshold_eye[0:height, int(widthShape / 2): widthShape]
+    right_side_threshold = threshold_eye[0:height, int(widthShape / 2) : widthShape]
     right_side_white = cv2.countNonZero(right_side_threshold)
 
     # Calculate the gaze ratio
     gaze_ratio = (left_side_white + np.finfo(float).eps) / (
-            right_side_white + np.finfo(float).eps
+        right_side_white + np.finfo(float).eps
     )
     # Put ratio in the webcam feed
     cv2.putText(frame, str(gaze_ratio), (50, 100), font, 2, (0, 255, 0), 3)
@@ -230,6 +241,14 @@ def createMask(height, width, gray, eye_outline):
     return left_eye
 
 
-def handle_distance(gaze : Gaze, frame):
+def handle_distance(gaze: Gaze, frame):
     gaze.distance_detector.get_distance_actual(frame)
-    cv2.putText(frame, str(f"Distance = {gaze.distance_detector.distance}"), (50, 100), font, 2, (0, 255, 0), 3)
+    cv2.putText(
+        frame,
+        str(f"Distance = {gaze.distance_detector.distance}"),
+        (50, 100),
+        font,
+        2,
+        (0, 255, 0),
+        3,
+    )
