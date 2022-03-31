@@ -24,6 +24,7 @@ def main():
     capture_window = False
     sentinel = 0
     gaze = Gaze()
+    gaze.find_ref_image_width()
 
     # Event Loop
     while True:
@@ -46,11 +47,12 @@ def main():
             #    print("Can't receive frame (stream end?). Exiting ...")
             #    break
             gaze = gz.prepare_gaze_object(gaze, frame)
-            if values["_LELINES_"] or values["_RELINES_"]:
+            #if values["_LELINES_"] or values["_RELINES_"]:
                 # getFace(frame) OLD IMPLEMENTATION
-                gz.handle_faces(
-                    gaze, frame, lle=values["_LELINES_"], lre=values["_RELINES_"]
-                )
+            #    gz.handle_faces(
+            #        gaze, frame, lle=values["_LELINES_"], lre=values["_RELINES_"]
+            #    )
+            gz.handle_faces(gaze, frame, lle=values["_LELINES_"], lre=values["_RELINES_"], closed=values["_EYECLOSED_"], outline=values["_OUTLINE_"], ratio=values["_RATIO_"], distance=values["_DISTANCE_"])
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             gui.window["window"].update(data=imgbytes)

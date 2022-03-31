@@ -55,7 +55,7 @@ def face_data(image, face_detector):
     # getting coordinates x, y , width and height
     for (x, y, h, w) in faces:
         # draw the rectangle on the face
-        cv2.rectangle(image, (x, y), (x + w, y + h), GREEN, 2)
+        # cv2.rectangle(image, (x, y), (x + w, y + h), GREEN, 2)
 
         # getting face width in the pixels
         face_width = w

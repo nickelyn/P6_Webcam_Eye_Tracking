@@ -66,12 +66,12 @@ class Gui:
         [sg.Input(size=(25, 1), focus=False), sg.Image(search_icon)],
         [sg.Checkbox("Generate Heatmap", default=True, key="_HEATMAP_")],
         [sg.Checkbox("Left eye lines", default=False, key="_LELINES_")],
-        [sg.Checkbox("Right eye lines", default=True, key="_RELINES_")],
+        [sg.Checkbox("Right eye lines", default=False, key="_RELINES_")],
         [sg.Checkbox("Show FPS", default=True, key="_FPS_")],
-        [sg.Checkbox("5", default=False)],
-        [sg.Checkbox("6", default=False)],
-        [sg.Checkbox("7", default=False)],
-        [sg.Checkbox("8", default=False)],
+        [sg.Checkbox("Check if eyes are closed", default=False, key="_EYECLOSED_")],
+        [sg.Checkbox("Outline Eyes", default=False, key="_OUTLINE_")],
+        [sg.Checkbox("Ratio", default=False, key="_RATIO_")],
+        [sg.Checkbox("Calculate Distance", default=False, key="_DISTANCE_")],
         [sg.Checkbox("9", default=False)],
     ]
 
