@@ -25,6 +25,7 @@ jobs:
           python-version: 3.8
 
       - name: Install OpenCV dependencies
+        if: ${{matrix.os.fullname == 'ubuntu-latest'}}
         run: |
           sudo apt-get update -y
           sudo apt-get install ffmpeg -y

@@ -15,11 +15,11 @@ class TestCV(unittest.TestCase):
         self.seq = capture
 
     def test_camera(self):
+        log = logging.getLogger(__class__.__name__)
         if platform.system() == "Linux":
             log.debug(platform.system())
             print(platform.system())
             return True
-        log = logging.getLogger(__class__.__name__)
         log.debug("Testing camera")
         log.debug(platform.system())
         self.assertTrue(self.seq.isOpened())
