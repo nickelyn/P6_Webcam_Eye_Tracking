@@ -12,6 +12,7 @@ from window import Window
 from PIL import Image
 from eyegaze import *
 import platform as p
+from gazetracker.gaze_tracking import GazeTracking
 
 IMG_SIZE_W = 400
 IMG_SIZE_H = 400
@@ -25,6 +26,7 @@ def main():
     sentinel = 0
     gaze = Gaze()
     gaze.find_ref_image_width()
+    new_gaze = GazeTracking()
 
     # Event Loop
     while True:
@@ -62,6 +64,25 @@ def main():
                 ratio=values["_RATIO_"],
                 distance=values["_DISTANCE_"],
             )
+
+            if values["_NEWGAZE_"]:
+                new_gaze.refresh(frame)
+                frame = new_gaze.annotated_frame()
+                text = ""
+
+                if new_gaze.is_blinking():
+                    text = "Blinking"
+                elif new_gaze.is_right():
+                    text = "Looking right"
+                elif new_gaze.is_left():
+                    text = "Looking left"
+                elif new_gaze.is_center():
+                    text = "Looking center"
+
+                cv2.putText(frame, str(new_gaze.vertical_ratio()), (20, 20), cv2.FONT_HERSHEY_DUPLEX, 0.5,
+                            (147, 58, 31), 1)
+                cv2.putText(frame, str(new_gaze.horizontal_ratio()), (40, 40), cv2.FONT_HERSHEY_DUPLEX, 0.5,
+                            (147, 58, 31), 1)
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             gui.window["window"].update(data=imgbytes)
