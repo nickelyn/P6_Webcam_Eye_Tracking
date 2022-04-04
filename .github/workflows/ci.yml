@@ -1,0 +1,69 @@
+on: [push, pull_request]
+name: Continuous Integration
+
+jobs:
+  test:
+    name: Test
+
+    runs-on: ${{matrix.os.fullname}} #ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+          os:
+            - { prettyname: Windows, fullname: windows-latest }
+            - { prettyname: macOS, fullname: macos-latest }
+            - { prettyname: Linux, fullname: ubuntu-latest }
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install OpenCV dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install ffmpeg -y
+          sudo apt-get install libsm6 -y
+          sudo apt-get install libxext6 -y
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install flake8 pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Test
+        run: python -m pytest
+
+  inspect-code:
+      name: Code Quality
+      # if: github.event.pull_request.head.repo.full_name == github.repository
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+          with:
+            ref: ${{ github.head_ref }}
+
+        - name: black
+          uses: lgeiger/black-action@v1.0.1
+          with:
+            args: --line-length 88 .
+
+        - name: Check for modified files
+          id: git-check
+          run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+
+        - name: Push changes
+          if: steps.git-check.outputs.modified == 'true'
+          run: |
+            git config --global user.name 'black formatter'
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+            git commit -am "Automated changes"
+            git push
