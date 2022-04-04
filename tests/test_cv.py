@@ -27,6 +27,5 @@ class TestCV(unittest.TestCase):
         self.assertFalse(self.seq.isOpened())
 
 
-
 if __name__ == "__main__":
     unittest.main()
