@@ -7,6 +7,7 @@ sys.path.append(parent)
 
 from src.gui import Gui
 
+
 class TestGUI(unittest.TestCase):
     def test_gui(self):
         self.gui = Gui()

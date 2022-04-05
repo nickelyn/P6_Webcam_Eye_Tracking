@@ -16,6 +16,7 @@ class Gui:
 
     Used to execute the interface
     """
+
     @staticmethod
     def make_window():
         """
@@ -88,7 +89,7 @@ class Gui:
                 sg.Column(select_window),
             ],
         ]
-        
+
         layout = [
             [
                 sg.vtop(sg.Column(left_col)),

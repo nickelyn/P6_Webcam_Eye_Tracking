@@ -11,6 +11,7 @@ sys.path.append(parent)
 
 from definitions import *
 
+
 class GazeTracking(object):
     def __init__(self):
         self.frame = None
@@ -22,7 +23,9 @@ class GazeTracking(object):
         self._face_detector = dlib.get_frontal_face_detector()
 
         # _predictor is used to get facial landmarks of a given face
-        model_path = os.path.join(DATA_DIR, "models/shape_predictor_68_face_landmarks.dat")
+        model_path = os.path.join(
+            DATA_DIR, "models/shape_predictor_68_face_landmarks.dat"
+        )
         self._predictor = dlib.shape_predictor(model_path)
 
     @property
