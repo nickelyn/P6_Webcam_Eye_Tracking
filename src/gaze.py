@@ -1,8 +1,16 @@
+import os
+import sys
 import cv2
 import dlib
 from math import hypot
+from definitions import DATA_DIR
 from distance_detection.distance_detector import DistanceDetector
 import distance_detection.distance_detector as dt
+
+parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent)
+
+from definitions import *
 
 import numpy as np
 
@@ -16,9 +24,9 @@ class Gaze:
         self.faces = None
         self.grey = None
         self.detector = dlib.get_frontal_face_detector()
-        self.predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+        self.predictor = dlib.shape_predictor(os.path.join(DATA_DIR, "shape_predictor_68_face_landmarks.dat"))
         self.distance_detector = DistanceDetector()
-        self.ref_image = cv2.imread("distance_detection/Ref_image_new.jpg")
+        self.ref_image = cv2.imread(os.path.join(DATA_DIR, "images/ref_image_new.jpg"))
 
     def feed_frame(self, frame):
         self.grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

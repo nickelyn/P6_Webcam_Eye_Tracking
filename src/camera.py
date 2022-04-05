@@ -1,6 +1,3 @@
-import platform
-
-import numpy as np
 import cv2
 import platform as p
 
