@@ -1,4 +1,4 @@
-import platform
+import platform as p
 import unittest
 import cv2 as cv
 
@@ -9,7 +9,7 @@ class TestCV(unittest.TestCase):
 
     def test_camera(self):
         # TODO: Unable to test camera on VM. Check if actual user, if not dont run test
-        if platform.system() == "Linux": 
+        if p.system() == "Linux" or p.system() == "Darwin": 
             return True
 
         self.assertTrue(self.seq.isOpened())
