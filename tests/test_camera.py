@@ -2,6 +2,7 @@ import platform as p
 import unittest
 import cv2 as cv
 
+
 class TestCV(unittest.TestCase):
     def setUp(self):
         capture = cv.VideoCapture(0)

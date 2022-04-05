@@ -9,8 +9,8 @@ sys.path.append(parent)
 from definitions import *
 from src.window import Window
 
-class TestWindow(unittest.TestCase):
 
+class TestWindow(unittest.TestCase):
     def setUp(self):
         self.window = Window("")
         self.assertFalse(os.path.exists(RESOURCES_DIR))
@@ -24,7 +24,7 @@ class TestWindow(unittest.TestCase):
             self.window.take_screenshot_of_window_mac(path)
         else:
             self.window.take_screenshot_of_window(path)
-        
+
         self.assertTrue(os.path.exists(path))
 
     def tearDown(self):
@@ -33,6 +33,6 @@ class TestWindow(unittest.TestCase):
         os.rmdir(RESOURCES_DIR)
         self.assertFalse(os.path.exists(RESOURCES_DIR))
 
+
 if __name__ == "__main__":
     unittest.main()
-    

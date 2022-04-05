@@ -6,10 +6,12 @@ import dlib
 from math import hypot
 from distance_detection.distance_detector import DistanceDetector
 import distance_detection.distance_detector as dt
+
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)
 
 from definitions import *
+
 
 def findMidPoint(p1, p2):
     return int((p1.x + p2.x) / 2), int((p1.y + p2.y) / 2)
@@ -23,7 +25,9 @@ def setDetector():
 
 def setPredictor():
     # Use the d.lib to predict facial landmarks / shapes
-    predictor = dlib.shape_predictor(DATA_DIR + "/" + "shape_predictor_68_face_landmarks.dat")
+    predictor = dlib.shape_predictor(
+        DATA_DIR + "/" + "shape_predictor_68_face_landmarks.dat"
+    )
     return predictor
 
 

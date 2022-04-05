@@ -45,7 +45,7 @@ def main():
             if p.system() != "Darwin":
                 for title in titles_list:
                     # TODO: Sometimes returns out of range error
-                    w = pygetwindow.getWindowsWithTitle(title)[0]   
+                    w = pygetwindow.getWindowsWithTitle(title)[0]
                     # print(len(w.title))
                     if w.isMinimized or len(title) == 0:
                         titles_list.remove(title)
