@@ -43,12 +43,14 @@ class Pupil(object):
         """
         self.iris_frame = self.image_processing(eye_frame, self.threshold)
 
-        contours, _ = cv2.findContours(self.iris_frame, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)[-2:]
+        contours, _ = cv2.findContours(
+            self.iris_frame, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE
+        )[-2:]
         contours = sorted(contours, key=cv2.contourArea)
 
         try:
             moments = cv2.moments(contours[-2])
-            self.x = int(moments['m10'] / moments['m00'])
-            self.y = int(moments['m01'] / moments['m00'])
+            self.x = int(moments["m10"] / moments["m00"])
+            self.y = int(moments["m01"] / moments["m00"])
         except (IndexError, ZeroDivisionError):
             pass

@@ -33,7 +33,7 @@ class Monitor:
 
     def convert_pixels_to_size_inches(self):
         aspect_ratio = self.aspect_ratio[0] / self.aspect_ratio[1]
-        aspect = aspect_ratio ** 2
+        aspect = aspect_ratio**2
         aspect = aspect + 1
         aspect = math.sqrt(aspect)
         self.height = self.diagonal / aspect
@@ -59,4 +59,3 @@ if __name__ == "__main__":
 
     print(f"Height = {monitor.height}")
     print(f"Width = {monitor.width}")
-

@@ -38,7 +38,9 @@ class Eye(object):
             landmarks (dlib.full_object_detection): Facial landmarks for the face region
             points (list): Points of an eye (from the 68 Multi-PIE landmarks)
         """
-        region = np.array([(landmarks.part(point).x, landmarks.part(point).y) for point in points])
+        region = np.array(
+            [(landmarks.part(point).x, landmarks.part(point).y) for point in points]
+        )
         region = region.astype(np.int32)
         self.landmark_points = region
 
@@ -76,7 +78,9 @@ class Eye(object):
         left = (landmarks.part(points[0]).x, landmarks.part(points[0]).y)
         right = (landmarks.part(points[3]).x, landmarks.part(points[3]).y)
         top = self._middle_point(landmarks.part(points[1]), landmarks.part(points[2]))
-        bottom = self._middle_point(landmarks.part(points[5]), landmarks.part(points[4]))
+        bottom = self._middle_point(
+            landmarks.part(points[5]), landmarks.part(points[4])
+        )
 
         eye_width = math.hypot((left[0] - right[0]), (left[1] - right[1]))
         eye_height = math.hypot((top[0] - bottom[0]), (top[1] - bottom[1]))
@@ -87,7 +91,6 @@ class Eye(object):
             ratio = None
 
         return ratio
-
 
     def _analyze(self, original_frame, landmarks, side, calibration):
         """Detects and isolates the eye in a new frame, sends data to the calibration

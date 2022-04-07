@@ -79,10 +79,24 @@ def main():
                 elif new_gaze.is_center():
                     text = "Looking center"
 
-                cv2.putText(frame, str(new_gaze.vertical_ratio()), (20, 20), cv2.FONT_HERSHEY_DUPLEX, 0.5,
-                            (147, 58, 31), 1)
-                cv2.putText(frame, str(new_gaze.horizontal_ratio()), (40, 40), cv2.FONT_HERSHEY_DUPLEX, 0.5,
-                            (147, 58, 31), 1)
+                cv2.putText(
+                    frame,
+                    str(new_gaze.vertical_ratio()),
+                    (20, 20),
+                    cv2.FONT_HERSHEY_DUPLEX,
+                    0.5,
+                    (147, 58, 31),
+                    1,
+                )
+                cv2.putText(
+                    frame,
+                    str(new_gaze.horizontal_ratio()),
+                    (40, 40),
+                    cv2.FONT_HERSHEY_DUPLEX,
+                    0.5,
+                    (147, 58, 31),
+                    1,
+                )
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             gui.window["window"].update(data=imgbytes)

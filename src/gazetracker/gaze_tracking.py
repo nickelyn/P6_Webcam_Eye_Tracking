@@ -18,7 +18,9 @@ class GazeTracking(object):
 
         # _predictor is used to get facial landmarks of a given face
         cwd = os.path.abspath(os.path.dirname(__file__))
-        model_path = os.path.abspath(os.path.join(cwd, "models/shape_predictor_68_face_landmarks.dat"))
+        model_path = os.path.abspath(
+            os.path.join(cwd, "models/shape_predictor_68_face_landmarks.dat")
+        )
         self._predictor = dlib.shape_predictor(model_path)
 
     @property
@@ -54,8 +56,6 @@ class GazeTracking(object):
         """
         self.frame = frame
         self._analyze()
-
-
 
     def pupil_left_coords(self):
         """Returns the coordinates of the left pupil"""
@@ -112,7 +112,12 @@ class GazeTracking(object):
     def is_center(self):
         """Returns true if the user is looking to the center"""
         if self.pupils_located:
-            return self.is_right() is not True and self.is_left() is not True and self.is_up() is not True and self.is_down() is not True
+            return (
+                self.is_right() is not True
+                and self.is_left() is not True
+                and self.is_up() is not True
+                and self.is_down() is not True
+            )
 
     def is_blinking(self):
         """Returns true if the user closes his eyes"""
