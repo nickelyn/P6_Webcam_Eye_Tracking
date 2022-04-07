@@ -2,3 +2,4 @@ opencv-python
 pysimplegui
 pyautogui
 Pillow
+screeninfo==0.8
