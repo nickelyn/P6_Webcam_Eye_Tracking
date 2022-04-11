@@ -1,10 +1,14 @@
 import io
 import os
 import argparse
-import pygetwindow
-import src.gaze as gz
+import time
 
-from src.gaze import Gaze
+import keyboard
+import gaze_calculator.calibrator as cali
+import pygetwindow
+import gaze as gz
+
+from gaze import Gaze
 from camera import *
 from gui import *
 import pyautogui
@@ -13,20 +17,51 @@ from PIL import Image
 from eyegaze import *
 import platform as p
 from gazetracker.gaze_tracking import GazeTracking
+from gaze_calculator.monitor_calculator import Monitor
+from gaze_calculator.boxes import Box
+from gaze_calculator.heatmapper import Heatmap
 
 IMG_SIZE_W = 400
 IMG_SIZE_H = 400
 
 
-def main():
+def calibrate_monitor(screensize: int):
+    monitor = Monitor(screensize)
+    monitor.get_monitor_dimension()
+    monitor.calculate_aspect_ratio()
+    monitor.convert_pixels_to_size_inches()
+    monitor.size_to_cm()
+
+    return monitor
+
+def intialize_heatmap_array(box_amount : int):
+    ha = [[0 for x in range(box_amount+1)] for i in range(box_amount+1)]
+    return ha
+
+
+def main(screensize: int):
     toggle = False
     window_capture = Window("")
     titles_found = False
     capture_window = False
+    initial_calibration = False
     sentinel = 0
     gaze = Gaze()
     gaze.find_ref_image_width()
     new_gaze = GazeTracking()
+    upperleft = False
+    lowerright = False
+    rightmost = False
+    leftmost = False
+    uppervalue = 0
+    lowervalue = 0
+    rightvalue = 0
+    leftvalue = 0
+    monitor = calibrate_monitor(screensize)
+    box = None
+    recording = False
+    heatmap_array = []
+    generate_heatmap = False
 
     # Event Loop
     while True:
@@ -68,6 +103,7 @@ def main():
             if values["_NEWGAZE_"]:
                 new_gaze.refresh(frame)
                 frame = new_gaze.annotated_frame()
+<<<<<<< Updated upstream
                 text = ""
 
                 if new_gaze.is_blinking():
@@ -97,6 +133,64 @@ def main():
                     (147, 58, 31),
                     1,
                 )
+=======
+
+                if initial_calibration:
+                    if recording:
+                        if new_gaze.horizontal_ratio() is not None and new_gaze.vertical_ratio() is not None:
+                            # TODO : Upper right is scuffed, and lower right has a few spikes
+                            actual_box = box.determine_actual_boxes(ver_ratio=new_gaze.vertical_ratio(),
+                                                                    hor_ratio=new_gaze.horizontal_ratio())
+                            #print(actual_box)
+                            vert_value = actual_box[0]
+                            hori_value = actual_box[1]
+                            #count the array up
+                            heatmap_array[vert_value][hori_value] = heatmap_array[vert_value][hori_value] + 1
+                        else:
+                            print("got none")
+                else:
+                    # key = keyboard.is_pressed()
+                    if upperleft is not True:
+                        cv2.putText(frame, "Look in the upper left corner and pres 'Q' on your keyboard", (20, 20),
+                                    cv2.FONT_HERSHEY_DUPLEX, 0.5,
+                                    (147, 58, 31), 1)
+                        if keyboard.is_pressed("q") and new_gaze.vertical_ratio() is not None:
+                            upperleft = True
+                            uppervalue = float("{:.3f}".format(new_gaze.vertical_ratio()))
+                    elif lowerright is not True:
+                        cv2.putText(frame, "Look in the lower right corner and pres 'W' on your keyboard", (20, 20),
+                                    cv2.FONT_HERSHEY_DUPLEX, 0.5,
+                                    (147, 58, 31), 1)
+                        if keyboard.is_pressed("w") and new_gaze.vertical_ratio() is not None:
+                            lowerright = True
+                            lowervalue = float("{:.3f}".format(new_gaze.vertical_ratio()))
+
+                    elif leftmost is not True:
+                        cv2.putText(frame, "Look at the left most side and pres 'E' on your keyboard", (20, 20),
+                                    cv2.FONT_HERSHEY_DUPLEX, 0.5,
+                                    (147, 58, 31), 1)
+                        if keyboard.is_pressed("e") and new_gaze.horizontal_ratio() is not None:
+                            leftmost = True
+                            leftvalue = float("{:.3f}".format(new_gaze.horizontal_ratio()))
+
+                    elif rightmost is not True:
+                        cv2.putText(frame, "Look at the right most side and pres 'R' on your keyboard", (20, 20),
+                                    cv2.FONT_HERSHEY_DUPLEX, 0.5,
+                                    (147, 58, 31), 1)
+                        if keyboard.is_pressed("r") and new_gaze.horizontal_ratio() is not None:
+                            rightmost = True
+                            rightvalue = float("{:.3f}".format(new_gaze.horizontal_ratio()))
+
+                    if upperleft and lowerright and rightmost and leftmost:
+                        box = Box(monitor=monitor, bounds=[uppervalue, lowervalue, leftvalue, rightvalue])
+                        #heatmap_array = intialize_heatmap_array(box_amount=box.box_amount)
+                        initial_calibration = True
+
+                    gui.window["UPPERBOUND"].update(value=f"Upper bound = {uppervalue}")
+                    gui.window["LOWERBOUND"].update(value=f"Lower bound = {lowervalue}")
+                    gui.window["LEFTBOUND"].update(value=f"Leftmost bound = {leftvalue}")
+                    gui.window["RIGHTBOUND"].update(value=f"Rightmost bound = {rightvalue}")
+>>>>>>> Stashed changes
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             gui.window["window"].update(data=imgbytes)
@@ -111,9 +205,10 @@ def main():
         if event == "_TOGGLE_":
             toggle = not toggle
             gui.window.Element("_TOGGLE_").Update(
-                ("OFF", "ON")[toggle],
-                button_color=(("white", ("red", "green")[toggle])),
+                ("TOGGLE ON", "TOGGLE OFF")[toggle],
+                button_color=((("dark green", "red")[toggle]), "grey44"),
             )
+            gui.window["_NEWGAZE_"].update(value=toggle)
             if toggle:
                 cam.is_recording = True
                 cam.setsize(IMG_SIZE_W, IMG_SIZE_H)
@@ -146,8 +241,8 @@ def main():
                 if sentinel > 20:
                     combo = values["SELECT"]
                     window = Window(combo)
+                    dir = "resources/windowfeed/"
                     try:
-                        dir = "resources/windowfeed/"
                         file_name = "windowfeed.png"
                         path = os.path.join(dir, file_name)
                         window.take_screenshot_of_window(path)
@@ -163,9 +258,24 @@ def main():
                 sentinel += 1
 
         # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
-        elif event == "Record":
-            frame = pyautogui.getWindowsWithTitle(values["SELECT"])
-            gui.window.minimize()
+        elif event == "_RECORDING_":
+            # frame = pyautogui.getWindowsWithTitle(values["SELECT"])
+            # gui.window.minimize()
+            recording = not recording
+            gui.window.Element("_RECORDING_").Update(
+                ("RECORD", "STOP")[recording],
+                button_color=((("dark green", "red")[recording], "grey44")),
+            )
+
+            if generate_heatmap:
+                heatmap = Heatmap(data=heatmap_array, length=box.box_amount+1)
+                print(heatmap_array)
+                generate_heatmap = not generate_heatmap
+            else:
+                heatmap_array = intialize_heatmap_array(box_amount=box.box_amount)
+                generate_heatmap = not generate_heatmap
+
+            #gui.window["_HEATMAP_"].update(value=recording)
             # frame = pyautogui.screenshot()
             # frame.save("test.png")
             # imgbytes = cv2.imencode(".png", frame)[1].tobytes()
@@ -177,9 +287,6 @@ def main():
             else:
                 capture_window = True
 
-        elif event == "Stop":
-            pass
-
         if event == "Exit" or event == sg.WIN_CLOSED:
             gui.window.close()
             return
@@ -189,15 +296,25 @@ if __name__ == "__main__":
     # Optional arguments if camera type is different from 0
     parser = argparse.ArgumentParser(description="webcam eye tracking.")
     parser.add_argument("--camera", help="Camera divide number.", type=int, default=0)
+    parser.add_argument("--size", help="Screen size in inches.", type=int, default=0)
     args = parser.parse_args()
+
+    if args.size == 0:
+        print("Please add your size of your monitor as an argument, before launching the system")
+        exit(1)
 
     # Store camera argument
     device = args.camera
+    monitor_size = args.size
 
     # Instantiate GUI and Camera Class
     gui = Gui()
     cam = Camera(device)
     # distance_detector = DistanceDetector()
 
-    main()
+    gui.window["SIZETEXT"].update(value=f"Screen Size : {monitor_size} Inches")
+    intialize_heatmap_array(32)
+
+    main(monitor_size)
+
     # pyinstaller -c -F view.spec -y

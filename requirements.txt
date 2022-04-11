@@ -3,3 +3,5 @@ pysimplegui
 pyautogui
 Pillow
 screeninfo==0.8
+keyboard
+seaborn==0.11.2

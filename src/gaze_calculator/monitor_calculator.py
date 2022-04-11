@@ -4,8 +4,6 @@ from screeninfo import get_monitors
 
 
 class Monitor:
-    _multiplier = 4
-
     def __init__(self, diagonal: int):
         self.height = 0
         self.width = 0
@@ -14,6 +12,8 @@ class Monitor:
         self.pixels_height = 0
         self.aspect_ratio = list()
         self.diagonal = diagonal
+        self.box_height_pixels = 0
+        self.box_width_pixels = 0
 
     def calculate_aspect_ratio(self):
         ratio = self.pixels_width / self.pixels_height
@@ -42,6 +42,10 @@ class Monitor:
     def size_to_cm(self):
         self.height = convert_inches_to_cm(self.height)
         self.width = convert_inches_to_cm(self.width)
+
+    def determine_box_pixels(self, multiplier: int):
+        self.box_width_pixels = self.aspect_ratio[0] * multiplier
+        self.box_height_pixels = self.aspect_ratio[1] * multiplier
 
 
 def convert_inches_to_cm(value: float):

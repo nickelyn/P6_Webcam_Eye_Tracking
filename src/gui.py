@@ -30,17 +30,24 @@ class Gui:
         [sg.Text("Webcam", font=HEADER_FONT)],
         [
             sg.Button(
-                "OFF",
-                size=(5, 1),
-                button_color=("white", "red"),
+                "TOGGLE ON",
+                size=(12, 1),
+                button_color=("dark green", "grey44"),
                 key="_TOGGLE_",
             )
         ],
     ]
 
     button_controls = [
-        [sg.Text("Status:", font=HEADER_FONT), sg.Text("", key="status")],
-        [sg.Button("Record"), sg.Button("Stop")],
+        [sg.Text("Status:", font=HEADER_FONT), sg.Text("Stopped", key="status")],
+        [
+            sg.Button(
+                "RECORD",
+                size=(8, 1),
+                button_color=("dark green", "grey44"),
+                key="_RECORDING_",
+            )
+        ],
     ]
 
     select_window = [
@@ -73,6 +80,11 @@ class Gui:
         [sg.Checkbox("Ratio", default=False, key="_RATIO_")],
         [sg.Checkbox("Calculate Distance", default=False, key="_DISTANCE_")],
         [sg.Checkbox("New Approach", default=False, key="_NEWGAZE_")],
+        [sg.Text("Screen size", size=(20, 1), font=DEFAULT_FONT, key="SIZETEXT")],
+        [sg.Text("Upper bound", size=(20, 1), font=DEFAULT_FONT, key="UPPERBOUND")],
+        [sg.Text("Lower bound", size=(20, 1), font=DEFAULT_FONT, key="LOWERBOUND")],
+        [sg.Text("Rightmost bound", size=(20, 1), font=DEFAULT_FONT, key="RIGHTBOUND")],
+        [sg.Text("Leftmost bound", size=(20, 1), font=DEFAULT_FONT, key="LEFTBOUND")],
     ]
 
     right_col = [
@@ -100,7 +112,7 @@ class Gui:
             finalize=True,
             default_button_element_size=(12, 1),
             auto_size_buttons=True,
-            resizable=False,
+            resizable=True,
             font=self.DEFAULT_FONT,
         )
 
