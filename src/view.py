@@ -103,7 +103,6 @@ def main(screensize: int):
             if values["_NEWGAZE_"]:
                 new_gaze.refresh(frame)
                 frame = new_gaze.annotated_frame()
-<<<<<<< Updated upstream
                 text = ""
 
                 if new_gaze.is_blinking():
@@ -133,7 +132,6 @@ def main(screensize: int):
                     (147, 58, 31),
                     1,
                 )
-=======
 
                 if initial_calibration:
                     if recording:
@@ -190,7 +188,6 @@ def main(screensize: int):
                     gui.window["LOWERBOUND"].update(value=f"Lower bound = {lowervalue}")
                     gui.window["LEFTBOUND"].update(value=f"Leftmost bound = {leftvalue}")
                     gui.window["RIGHTBOUND"].update(value=f"Rightmost bound = {rightvalue}")
->>>>>>> Stashed changes
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             gui.window["window"].update(data=imgbytes)
