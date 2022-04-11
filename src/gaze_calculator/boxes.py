@@ -4,7 +4,6 @@ from .monitor_calculator import Monitor
 
 
 class Box:
-
     def __init__(self, monitor: Monitor, bounds: list):
         if monitor.aspect_ratio == [16, 9]:
             self.horizontal_bounds = 80
