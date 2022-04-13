@@ -145,6 +145,7 @@ def main(screensize: int):
                                 ver_ratio=new_gaze.vertical_ratio(),
                                 hor_ratio=new_gaze.horizontal_ratio(),
                             )
+                            print(actual_box)
                             # print(actual_box)
                             vert_value = actual_box[0]
                             hori_value = actual_box[1]
