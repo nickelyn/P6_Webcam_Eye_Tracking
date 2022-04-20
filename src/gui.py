@@ -81,8 +81,16 @@ class Gui:
             [sg.Text("Screen size", size=(20, 1), font=DEFAULT_FONT, key="SIZETEXT")],
             [sg.Text("Upper bound", size=(20, 1), font=DEFAULT_FONT, key="UPPERBOUND")],
             [sg.Text("Lower bound", size=(20, 1), font=DEFAULT_FONT, key="LOWERBOUND")],
-            [sg.Text("Rightmost bound", size=(20, 1), font=DEFAULT_FONT, key="RIGHTBOUND")],
-            [sg.Text("Leftmost bound", size=(20, 1), font=DEFAULT_FONT, key="LEFTBOUND")],
+            [
+                sg.Text(
+                    "Rightmost bound", size=(20, 1), font=DEFAULT_FONT, key="RIGHTBOUND"
+                )
+            ],
+            [
+                sg.Text(
+                    "Leftmost bound", size=(20, 1), font=DEFAULT_FONT, key="LEFTBOUND"
+                )
+            ],
         ]
 
         right_col = [
