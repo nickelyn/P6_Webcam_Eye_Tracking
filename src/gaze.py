@@ -3,7 +3,6 @@ import sys
 import cv2
 import dlib
 from math import hypot
-from definitions import DATA_DIR
 from distance_detection.distance_detector import DistanceDetector
 import distance_detection.distance_detector as dt
 

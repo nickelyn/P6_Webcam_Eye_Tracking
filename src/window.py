@@ -31,7 +31,6 @@ class Window:
         x2 = x1 + width
         y2 = y1 + height
         pyautogui.screenshot(path)
-        print(f"x1 = {x1}, x2 = {x2}, y1 = {y1}, y2 = {y2}")
 
         im = Image.open(path)
         im = im.crop((x1, y1 + 35, x2 + 570, y2))

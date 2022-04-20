@@ -2,17 +2,14 @@ import io
 import os
 import sys
 import argparse
-import time
 
 import keyboard
-import gaze_calculator.calibrator as cali
 import pygetwindow
 import gaze as gz
 
 from gaze import Gaze
 from camera import *
 from gui import *
-import pyautogui
 from PIL import Image
 
 from camera import *
@@ -29,7 +26,6 @@ from window import Window
 # Necessary to traverse up the directory tree
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)
-
 from definitions import *
 
 IMG_SIZE_W = 400
@@ -85,23 +81,15 @@ def main(screensize: int):
                 for title in titles_list:
                     # TODO: Sometimes returns out of range error
                     w = pygetwindow.getWindowsWithTitle(title)[0]
-                    # print(len(w.title))
                     if w.isMinimized or len(title) == 0:
                         titles_list.remove(title)
             gui.window["SELECT"].update(values=titles_list, visible=True)
             titles_found = True
 
-        if cam.is_recording:  # Only use features if camera is on
-            ret, frame = cam.capture.read()
-            # if not ret:
-            #    print("Can't receive frame (stream end?). Exiting ...")
-            #    break
+        if cam.is_recording:
+            _, frame = cam.capture.read()
+
             gaze = gz.prepare_gaze_object(gaze, frame)
-            # if values["_LELINES_"] or values["_RELINES_"]:
-            # getFace(frame) OLD IMPLEMENTATION
-            #    gz.handle_faces(
-            #        gaze, frame, lle=values["_LELINES_"], lre=values["_RELINES_"]
-            #    )
             gz.handle_faces(
                 gaze,
                 frame,
@@ -157,8 +145,6 @@ def main(screensize: int):
                                 ver_ratio=new_gaze.vertical_ratio(),
                                 hor_ratio=new_gaze.horizontal_ratio(),
                             )
-                            print(actual_box)
-                            # print(actual_box)
                             vert_value = actual_box[0]
                             hori_value = actual_box[1]
                             # count the array up
@@ -168,7 +154,6 @@ def main(screensize: int):
                         else:
                             print("got none")
                 else:
-                    # key = keyboard.is_pressed()
                     if upperleft is not True:
                         cv2.putText(
                             frame,
@@ -249,7 +234,6 @@ def main(screensize: int):
                             monitor=monitor,
                             bounds=[uppervalue, lowervalue, leftvalue, rightvalue],
                         )
-                        # heatmap_array = intialize_heatmap_array(box_amount=box.box_amount)
                         initial_calibration = True
 
                     gui.window["UPPERBOUND"].update(value=f"Upper bound = {uppervalue}")
@@ -263,13 +247,6 @@ def main(screensize: int):
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             gui.window["window"].update(data=imgbytes)
-
-            # TODO: Implement features
-            if values["_HEATMAP_"] == True:
-                print("_HEATMAP_")
-
-            if values["_FPS_"] == True:
-                print("_FPS_")
 
         if event == "_TOGGLE_":
             toggle = not toggle
@@ -285,7 +262,7 @@ def main(screensize: int):
             elif not toggle:
                 cam.is_recording = False
                 gui.window["status"].update("Stopped")
-                # TODO: Fix  opencv image size not correlating to numpy image size
+
                 img = np.full((IMG_SIZE_H, IMG_SIZE_W), 255)
                 imgbytes = cv2.imencode(".png", img)[1].tobytes()
                 gui.window["window"].update(data=imgbytes)
@@ -294,7 +271,7 @@ def main(screensize: int):
             dir = os.path.join(RESOURCES_DIR, "windowfeed")
             file_name = "windowfeed.png"
             path = os.path.join(dir, file_name)
-            if p.system() == "Darwin":  # TODO: Find different approach
+            if p.system() == "Darwin":
                 if sentinel > 50:
                     combo = values["SELECT"]
                     window = Window(combo)
@@ -333,8 +310,6 @@ def main(screensize: int):
 
         # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
         elif event == "_RECORDING_":
-            # frame = pyautogui.getWindowsWithTitle(values["SELECT"])
-            # gui.window.minimize()
             recording = not recording
             gui.window.Element("_RECORDING_").Update(
                 ("RECORD", "STOP")[recording],
@@ -348,12 +323,6 @@ def main(screensize: int):
             else:
                 heatmap_array = intialize_heatmap_array(box_amount=box.box_amount)
                 generate_heatmap = not generate_heatmap
-
-            # gui.window["_HEATMAP_"].update(value=recording)
-            # frame = pyautogui.screenshot()
-            # frame.save("test.png")
-            # imgbytes = cv2.imencode(".png", frame)[1].tobytes()
-            # gui.window["frame"].update(data=imgbytes)
 
         elif event == "Apply":
             if capture_window:
@@ -374,19 +343,15 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.size == 0:
-        print(
-            "Please add your size of your monitor as an argument, before launching the system"
-        )
+        print("Please add the screen size of your monitor with the --size argument!")
         exit(1)
 
     # Store camera argument
     device = args.camera
     monitor_size = args.size
 
-    # Instantiate GUI and Camera Class
     gui = Gui()
     cam = Camera(device)
-    # distance_detector = DistanceDetector()
 
     gui.window["SIZETEXT"].update(value=f"Screen Size : {monitor_size} Inches")
     intialize_heatmap_array(32)

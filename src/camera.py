@@ -13,7 +13,6 @@ class Camera:
         self.is_recording = False
 
         if not self.capture.isOpened():
-            print("Could not access camera!")
             exit()
 
     def setsize(self, width, height):

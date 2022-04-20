@@ -4,8 +4,6 @@ import cv2
 import numpy as np
 import dlib
 from math import hypot
-from distance_detection.distance_detector import DistanceDetector
-import distance_detection.distance_detector as dt
 
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)

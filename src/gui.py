@@ -1,4 +1,3 @@
-import re
 import PySimpleGUI as sg
 
 APP_NAME = "Webcamera Usability Testing"
