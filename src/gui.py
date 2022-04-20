@@ -17,103 +17,102 @@ class Gui:
     Used to execute the interface
     """
 
-    THEME = "Dark Grey"
-    HEADER_FONT = "Dosis 14 bold"
-    DEFAULT_FONT = "Dosis 12"
-    sg.theme(THEME)
+    @staticmethod
+    def make_window():
+        """
+        Creates a window
+        """
+        THEME = "Dark Grey"
+        HEADER_FONT = "Dosis 14 bold"
+        DEFAULT_FONT = "Dosis 12"
+        sg.theme(THEME)
 
-    camera_feed = [[sg.Image(filename="", key="frame")]]
+        camera_feed = [[sg.Image(filename="", key="frame")]]
 
-    window_feed = [[sg.Image(filename="", key="window")]]
+        window_feed = [[sg.Image(filename="", key="window")]]
 
-    toggle = [
-        [sg.Text("Webcam", font=HEADER_FONT)],
-        [
-            sg.Button(
-                "TOGGLE ON",
-                size=(12, 1),
-                button_color=("dark green", "grey44"),
-                key="_TOGGLE_",
-            )
-        ],
-    ]
-
-    button_controls = [
-        [sg.Text("Status:", font=HEADER_FONT), sg.Text("Stopped", key="status")],
-        [
-            sg.Button(
-                "RECORD",
-                size=(8, 1),
-                button_color=("dark green", "grey44"),
-                key="_RECORDING_",
-            )
-        ],
-    ]
-
-    select_window = [
-        [
-            sg.Text("Current window:", font=HEADER_FONT),
-            sg.Text("", key="current_window"),
-        ],
-        [
-            sg.Combo(
-                "",
-                enable_events=True,
-                readonly=True,
-                font=DEFAULT_FONT,
-                key="SELECT",
-                size=(25, 1),
-            ),
-            sg.Button("Apply"),
-        ],
-    ]
-
-    left_col = [
-        [sg.Text("Features", size=(20, 1), font=HEADER_FONT)],
-        [sg.Input(size=(25, 1), focus=False), sg.Image(search_icon)],
-        [sg.Checkbox("Generate Heatmap", default=False, key="_HEATMAP_")],
-        [sg.Checkbox("Left eye lines", default=False, key="_LELINES_")],
-        [sg.Checkbox("Right eye lines", default=False, key="_RELINES_")],
-        [sg.Checkbox("Show FPS", default=False, key="_FPS_")],
-        [sg.Checkbox("Check if eyes are closed", default=False, key="_EYECLOSED_")],
-        [sg.Checkbox("Outline Eyes", default=False, key="_OUTLINE_")],
-        [sg.Checkbox("Ratio", default=False, key="_RATIO_")],
-        [sg.Checkbox("Calculate Distance", default=False, key="_DISTANCE_")],
-        [sg.Checkbox("New Approach", default=False, key="_NEWGAZE_")],
-        [sg.Text("Screen size", size=(20, 1), font=DEFAULT_FONT, key="SIZETEXT")],
-        [sg.Text("Upper bound", size=(20, 1), font=DEFAULT_FONT, key="UPPERBOUND")],
-        [sg.Text("Lower bound", size=(20, 1), font=DEFAULT_FONT, key="LOWERBOUND")],
-        [sg.Text("Rightmost bound", size=(20, 1), font=DEFAULT_FONT, key="RIGHTBOUND")],
-        [sg.Text("Leftmost bound", size=(20, 1), font=DEFAULT_FONT, key="LEFTBOUND")],
-    ]
-
-    right_col = [
-        [sg.Column(camera_feed, justification="center")],
-        [sg.Column(window_feed)],
-        [
-            sg.Column(button_controls),
-            sg.Column(toggle),
-            sg.Column(select_window),
-        ],
-    ]
-
-    def __init__(self) -> None:
-        self.layout = [
+        toggle = [
+            [sg.Text("Webcam", font=HEADER_FONT)],
             [
-                sg.vtop(sg.Column(self.left_col)),
+                sg.Button(
+                    "OFF",
+                    size=(5, 1),
+                    button_color=("white", "red"),
+                    key="_TOGGLE_",
+                )
+            ],
+        ]
+
+        button_controls = [
+            [sg.Text("Status:", font=HEADER_FONT), sg.Text("", key="status")],
+            [sg.Button("Record"), sg.Button("Stop")],
+        ]
+
+        select_window = [
+            [
+                sg.Text("Current window:", font=HEADER_FONT),
+                sg.Text("", key="current_window"),
+            ],
+            [
+                sg.Combo(
+                    "",
+                    enable_events=True,
+                    readonly=True,
+                    font=DEFAULT_FONT,
+                    key="SELECT",
+                    size=(25, 1),
+                ),
+                sg.Button("Apply"),
+            ],
+        ]
+
+        left_col = [
+            [sg.Text("Features", size=(20, 1), font=HEADER_FONT)],
+            [sg.Input(size=(25, 1), focus=False), sg.Image(search_icon)],
+            [sg.Checkbox("Generate Heatmap", default=False, key="_HEATMAP_")],
+            [sg.Checkbox("Left eye lines", default=False, key="_LELINES_")],
+            [sg.Checkbox("Right eye lines", default=False, key="_RELINES_")],
+            [sg.Checkbox("Show FPS", default=False, key="_FPS_")],
+            [sg.Checkbox("Check if eyes are closed", default=False, key="_EYECLOSED_")],
+            [sg.Checkbox("Outline Eyes", default=False, key="_OUTLINE_")],
+            [sg.Checkbox("Ratio", default=False, key="_RATIO_")],
+            [sg.Checkbox("Calculate Distance", default=False, key="_DISTANCE_")],
+            [sg.Checkbox("New Approach", default=False, key="_NEWGAZE_")],
+            [sg.Text("Screen size", size=(20, 1), font=DEFAULT_FONT, key="SIZETEXT")],
+            [sg.Text("Upper bound", size=(20, 1), font=DEFAULT_FONT, key="UPPERBOUND")],
+            [sg.Text("Lower bound", size=(20, 1), font=DEFAULT_FONT, key="LOWERBOUND")],
+            [sg.Text("Rightmost bound", size=(20, 1), font=DEFAULT_FONT, key="RIGHTBOUND")],
+            [sg.Text("Leftmost bound", size=(20, 1), font=DEFAULT_FONT, key="LEFTBOUND")],
+        ]
+
+        right_col = [
+            [sg.Column(camera_feed, justification="center")],
+            [sg.Column(window_feed)],
+            [
+                sg.Column(button_controls),
+                sg.Column(toggle),
+                sg.Column(select_window),
+            ],
+        ]
+
+        layout = [
+            [
+                sg.vtop(sg.Column(left_col)),
                 sg.VSeperator(),
-                sg.Column(self.right_col),
+                sg.Column(right_col),
             ]
         ]
 
-        self.window = sg.Window(
+        window = sg.Window(
             "{} {}".format(APP_NAME, APP_VERSION),
-            self.layout,
+            layout,
             finalize=True,
             default_button_element_size=(12, 1),
             auto_size_buttons=True,
-            resizable=True,
-            font=self.DEFAULT_FONT,
+            resizable=False,
+            font=DEFAULT_FONT,
         )
+        return window
 
-        # self.window.maximize() Looks odd
+    def __init__(self) -> None:
+        self.window = self.make_window()

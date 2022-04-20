@@ -1,5 +1,6 @@
 import io
 import os
+import sys
 import argparse
 import time
 
@@ -12,14 +13,24 @@ from gaze import Gaze
 from camera import *
 from gui import *
 import pyautogui
-from window import Window
 from PIL import Image
+
+from camera import *
 from eyegaze import *
-import platform as p
+import gaze as gz
+from gaze import Gaze
 from gazetracker.gaze_tracking import GazeTracking
 from gaze_calculator.monitor_calculator import Monitor
 from gaze_calculator.boxes import Box
 from gaze_calculator.heatmapper import Heatmap
+import platform as p
+from window import Window
+
+# Necessary to traverse up the directory tree
+parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent)
+
+from definitions import *
 
 IMG_SIZE_W = 400
 IMG_SIZE_H = 400
@@ -72,6 +83,7 @@ def main(screensize: int):
             titles_list = window_capture.get_windows_titles_list()
             if p.system() != "Darwin":
                 for title in titles_list:
+                    # TODO: Sometimes returns out of range error
                     w = pygetwindow.getWindowsWithTitle(title)[0]
                     # print(len(w.title))
                     if w.isMinimized or len(title) == 0:
@@ -279,20 +291,25 @@ def main(screensize: int):
                 gui.window["window"].update(data=imgbytes)
 
         if capture_window:
+            dir = os.path.join(RESOURCES_DIR, "windowfeed")
+            file_name = "windowfeed.png"
+            path = os.path.join(dir, file_name)
             if p.system() == "Darwin":  # TODO: Find different approach
                 if sentinel > 50:
-                    path = os.path.join(
-                        os.getcwd(), "../resources/windowfeed/windowfeed.png"
-                    )
                     combo = values["SELECT"]
                     window = Window(combo)
-                    window.take_screenshot_of_window_mac(path)
-                    img = Image.open(path)
-                    img.thumbnail((200, 200))
-                    bio = io.BytesIO()
-                    img.save(bio, format="PNG")
-                    gui.window["frame"].update(data=bio.getvalue())
-                    sentinel = 0
+                    try:
+                        window.take_screenshot_of_window_mac(path)
+                        img = Image.open(path)
+                        img.thumbnail((200, 200))
+                        bio = io.BytesIO()
+                        img.save(bio, format="PNG")
+                        gui.window["frame"].update(data=bio.getvalue())
+                        sentinel = 0
+                    except FileNotFoundError:
+                        print("MacOS: File not found")
+                        os.makedirs(dir)
+
                 sentinel = sentinel + 1
             else:
                 if sentinel > 20:
@@ -310,7 +327,7 @@ def main(screensize: int):
                         gui.window["frame"].update(data=bio.getvalue())
                         sentinel = 0
                     except FileNotFoundError:
-                        print("File not found")
+                        print("Windows: File not found")
                         os.makedirs(dir)
                 sentinel += 1
 
