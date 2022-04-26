@@ -7,7 +7,7 @@ parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)
 
 from definitions import *
-from src.window import Window
+from src.window_title import Window
 
 
 class TestWindow(unittest.TestCase):
