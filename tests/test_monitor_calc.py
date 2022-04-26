@@ -16,7 +16,7 @@ class TestMonitorCalc(unittest.TestCase):
         self.monitor.calculate_aspect_ratio()
 
         # ASSERT
-        self.assertEqual(self.monitor.aspect_ratio, [16,9], "Test")
+        self.assertEqual(self.monitor.aspect_ratio, [16, 9], "Test")
 
     def test_convert_to_inches(self):
         # ARRANGE
@@ -46,6 +46,5 @@ class TestMonitorCalc(unittest.TestCase):
         self.assertEqual(self.monitor.width, 59.8)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
