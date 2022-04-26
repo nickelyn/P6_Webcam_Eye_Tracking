@@ -47,10 +47,3 @@ def convert_inches_to_cm(value: float):
     cm = float("{:.1f}".format(cm))
     return cm
 
-
-if __name__ == "__main__":
-    monitor = Monitor(27)
-    monitor.get_monitor_dimension()
-    monitor.calculate_aspect_ratio()
-    monitor.convert_pixels_to_size_inches()
-    monitor.size_to_cm()
