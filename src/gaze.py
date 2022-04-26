@@ -30,7 +30,11 @@ class Gaze:
         self.ref_image = cv.imread(os.path.join(DATA_DIR, "images/ref_image_new.jpg"))
 
     def feed_frame(self, frame):
-        self.grey = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+        try:
+            self.grey = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+            return True
+        except:
+            return False
 
     def find_faces(self):
         self.faces = self.detector(self.grey)
