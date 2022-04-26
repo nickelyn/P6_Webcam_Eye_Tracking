@@ -54,6 +54,3 @@ if __name__ == "__main__":
     monitor.calculate_aspect_ratio()
     monitor.convert_pixels_to_size_inches()
     monitor.size_to_cm()
-
-    print(f"Height = {monitor.height}")
-    print(f"Width = {monitor.width}")

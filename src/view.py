@@ -1,14 +1,8 @@
 import io
-import os
-import sys
 import argparse
 
 import keyboard
 import pygetwindow
-import gaze as gz
-
-from gaze import Gaze
-from camera import *
 from gui import *
 from PIL import Image
 
