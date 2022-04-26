@@ -89,7 +89,9 @@ def main(screen_size: int):
             gz.handle_faces(
                 gaze,
                 frame,
-                lle=values["_LELINES_"],    # TypeError: 'NoneType' object is not subscriptable
+                lle=values[
+                    "_LELINES_"
+                ],  # TypeError: 'NoneType' object is not subscriptable
                 lre=values["_RELINES_"],
                 closed=values["_EYECLOSED_"],
                 outline=values["_OUTLINE_"],
@@ -160,7 +162,7 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if (kb.is_pressed("q")):
+                        if kb.is_pressed("q"):
                             upper_left = True
                             upper_val = float(
                                 "{:.3f}".format(gaze_tracking.vert_ratio())
@@ -175,9 +177,11 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if (kb.is_pressed("w")):
+                        if kb.is_pressed("w"):
                             lower_right = True
-                            lower_val = float("{:.3f}".format(gaze_tracking.vert_ratio()))
+                            lower_val = float(
+                                "{:.3f}".format(gaze_tracking.vert_ratio())
+                            )
 
                     elif leftmost is not True:
                         cv.putText(
@@ -189,7 +193,7 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if (kb.is_pressed("e")):
+                        if kb.is_pressed("e"):
                             leftmost = True
                             left_val = float(
                                 "{:.3f}".format(gaze_tracking.hori_ratio())
@@ -205,7 +209,7 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if (kb.is_pressed("r")):
+                        if kb.is_pressed("r"):
                             rightmost = True
                             right_val = float(
                                 "{:.3f}".format(gaze_tracking.hori_ratio())
@@ -220,9 +224,7 @@ def main(screen_size: int):
 
                     gui.window["UPPERBOUND"].update(value=f"Upper bound = {upper_val}")
                     gui.window["LOWERBOUND"].update(value=f"Lower bound = {lower_val}")
-                    gui.window["LEFTBOUND"].update(
-                        value=f"Leftmost bound = {left_val}"
-                    )
+                    gui.window["LEFTBOUND"].update(value=f"Leftmost bound = {left_val}")
                     gui.window["RIGHTBOUND"].update(
                         value=f"Rightmost bound = {right_val}"
                     )
