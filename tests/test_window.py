@@ -7,12 +7,12 @@ parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)
 
 from definitions import *
-from src.window_title import Window
+from src.window_title import WindowTitle
 
 
 class TestWindow(unittest.TestCase):
     def setUp(self):
-        self.window = Window("")
+        self.window = WindowTitle("")
         self.assertFalse(os.path.exists(RESOURCES_DIR))
         os.makedirs(RESOURCES_DIR)
         self.assertTrue(os.path.exists(RESOURCES_DIR))
