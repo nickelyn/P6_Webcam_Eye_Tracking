@@ -16,7 +16,7 @@ class TestBoxes(unittest.TestCase):
         self.box = Box(monitor=monitor, bounds=bounds)
 
     def test_vertical_difference(self):
-        self.assertEqual(self.box.ver_difference, self.box.lower-self.box.upper)
+        self.assertEqual(self.box.ver_difference, self.box.lower - self.box.upper)
 
     def test_horizontal_difference(self):
         self.assertEqual(self.box.hor_difference, self.box.right - self.box.left)
@@ -31,11 +31,13 @@ class TestBoxes(unittest.TestCase):
         hor_ratio = 1.0
 
         # ACT
-        actual = self.box.determine_actual_boxes(ver_ratio=ver_ratio, hor_ratio=hor_ratio)
+        actual = self.box.determine_actual_boxes(
+            ver_ratio=ver_ratio, hor_ratio=hor_ratio
+        )
 
         # ASSERT
         self.assertEqual(actual, [32, 32])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

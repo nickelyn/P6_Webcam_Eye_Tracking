@@ -21,7 +21,6 @@ class TestGazeTracking(unittest.TestCase):
         self.frame_closed = np.array(image)
         image.close()
 
-
     def test_refresh_frame(self):
         self.gazetracker.refresh(self.frame)
 
@@ -55,7 +54,6 @@ class TestGazeTracking(unittest.TestCase):
         self.gazetracker.refresh(self.frame_closed)
         blinking_true = self.gazetracker.is_blinking()
 
-
         self.assertEqual(False, blinking)
 
     def test_ratios(self):
@@ -68,6 +66,5 @@ class TestGazeTracking(unittest.TestCase):
         self.assertIsNotNone(ver)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
