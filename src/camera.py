@@ -1,14 +1,14 @@
-import cv2
+import cv2 as cv
 import platform as p
 
 
 class Camera:
     def __init__(self, device):
         self.device = device
-        if determine_mac_os():
-            self.capture = cv2.VideoCapture(device, cv2.CAP_AVFOUNDATION)
+        if get_OS() == "Darwin":
+            self.capture = cv.VideoCapture(device, cv.CAP_AVFOUNDATION)
         else:
-            self.capture = cv2.VideoCapture(device, cv2.CAP_DSHOW)
+            self.capture = cv.VideoCapture(device, cv.CAP_DSHOW)
 
         self.is_recording = False
 
@@ -16,11 +16,17 @@ class Camera:
             exit()
 
     def setsize(self, width, height):
-        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+        self.capture.set(cv.CAP_PROP_FRAME_WIDTH, width)
+        self.capture.set(cv.CAP_PROP_FRAME_HEIGHT, height)
 
 
-def determine_mac_os():
+def get_OS():
     if p.system() == "Darwin":
-        return True
-    return False
+        os = "Darwin"
+    elif p.system() == "Windows":
+        os = "Windows"
+    elif p.system() == "Linux":
+        os = "Linux"
+    else:
+        os = "Unknown"
+    return os

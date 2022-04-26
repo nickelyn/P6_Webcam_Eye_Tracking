@@ -3,14 +3,14 @@ import pygetwindow
 from PIL import Image
 
 
-class Window:
+class WindowTitle:
     def __init__(self, windowname: str):
         self.name = windowname
 
     def get_window(self):
         return pygetwindow.getWindowsWithTitle(self.name)[0]
 
-    def get_windows_titles_list(self):
+    def get_titles_list(self):
         return pygetwindow.getAllTitles()
 
     def take_screenshot_of_window(self, path: str):

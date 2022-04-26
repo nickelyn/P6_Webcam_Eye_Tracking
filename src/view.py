@@ -3,7 +3,7 @@ import os
 import sys
 import argparse
 
-import keyboard
+import keyboard as kb
 import pygetwindow
 import gaze as gz
 
@@ -21,7 +21,7 @@ from gaze_calculator.monitor_calculator import Monitor
 from gaze_calculator.boxes import Box
 from gaze_calculator.heatmapper import Heatmap
 import platform as p
-from window import Window
+from window_title import WindowTitle
 
 # Necessary to traverse up the directory tree
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -32,8 +32,8 @@ IMG_SIZE_W = 400
 IMG_SIZE_H = 400
 
 
-def calibrate_monitor(screensize: int):
-    monitor = Monitor(screensize)
+def calibrate_monitor(screen_size: int):
+    monitor = Monitor(screen_size)
     monitor.get_monitor_dimension()
     monitor.calculate_aspect_ratio()
     monitor.convert_pixels_to_size_inches()
@@ -42,30 +42,30 @@ def calibrate_monitor(screensize: int):
     return monitor
 
 
-def intialize_heatmap_array(box_amount: int):
-    ha = [[0 for x in range(box_amount + 1)] for i in range(box_amount + 1)]
+def intialise_heatmap_array(box_amt: int):
+    ha = [[0 for x in range(box_amt + 1)] for i in range(box_amt + 1)]
     return ha
 
 
-def main(screensize: int):
+def main(screen_size: int):
     toggle = False
-    window_capture = Window("")
+    window_title = WindowTitle("")
     titles_found = False
     capture_window = False
     initial_calibration = False
     sentinel = 0
     gaze = Gaze()
     gaze.find_ref_image_width()
-    new_gaze = GazeTracking()
-    upperleft = False
-    lowerright = False
+    gaze_tracking = GazeTracking()
+    upper_left = False
+    lower_right = False
     rightmost = False
     leftmost = False
-    uppervalue = 0
-    lowervalue = 0
-    rightvalue = 0
-    leftvalue = 0
-    monitor = calibrate_monitor(screensize)
+    upper_val = 0
+    lower_val = 0
+    right_val = 0
+    left_val = 0
+    monitor = calibrate_monitor(screen_size)
     box = None
     recording = False
     heatmap_array = []
@@ -73,10 +73,12 @@ def main(screensize: int):
 
     # Event Loop
     while True:
-        event, values = gui.window.read(timeout=50)
+        event, values = gui.window.read(timeout=20)
 
-        if not titles_found:
-            titles_list = window_capture.get_windows_titles_list()
+        if titles_found:
+            pass
+        else:
+            titles_list = window_title.get_titles_list()
             if p.system() != "Darwin":
                 for title in titles_list:
                     # TODO: Sometimes returns out of range error
@@ -93,7 +95,7 @@ def main(screensize: int):
             gz.handle_faces(
                 gaze,
                 frame,
-                lle=values["_LELINES_"],
+                lle=values["_LELINES_"],    # TypeError: 'NoneType' object is not subscriptable
                 lre=values["_RELINES_"],
                 closed=values["_EYECLOSED_"],
                 outline=values["_OUTLINE_"],
@@ -102,33 +104,33 @@ def main(screensize: int):
             )
 
             if values["_NEWGAZE_"]:
-                new_gaze.refresh(frame)
-                frame = new_gaze.annotated_frame()
+                gaze_tracking.refresh(frame)
+                frame = gaze_tracking.annotated_frame()
                 text = ""
 
-                if new_gaze.is_blinking():
+                if gaze_tracking.is_blinking():
                     text = "Blinking"
-                elif new_gaze.is_right():
+                elif gaze_tracking.is_right():
                     text = "Looking right"
-                elif new_gaze.is_left():
+                elif gaze_tracking.is_left():
                     text = "Looking left"
-                elif new_gaze.is_center():
+                elif gaze_tracking.is_center():
                     text = "Looking center"
 
-                cv2.putText(
+                cv.putText(
                     frame,
-                    str(new_gaze.vertical_ratio()),
+                    str(gaze_tracking.vert_ratio()),
                     (20, 20),
-                    cv2.FONT_HERSHEY_DUPLEX,
+                    cv.FONT_HERSHEY_DUPLEX,
                     0.5,
                     (147, 58, 31),
                     1,
                 )
-                cv2.putText(
+                cv.putText(
                     frame,
-                    str(new_gaze.horizontal_ratio()),
+                    str(gaze_tracking.hori_ratio()),
                     (40, 40),
-                    cv2.FONT_HERSHEY_DUPLEX,
+                    cv.FONT_HERSHEY_DUPLEX,
                     0.5,
                     (147, 58, 31),
                     1,
@@ -137,144 +139,124 @@ def main(screensize: int):
                 if initial_calibration:
                     if recording:
                         if (
-                            new_gaze.horizontal_ratio() is not None
-                            and new_gaze.vertical_ratio() is not None
+                            gaze_tracking.hori_ratio() is None
+                            and gaze_tracking.vert_ratio() is None
                         ):
+                            return
+                        else:
                             # TODO : Upper right is scuffed, and lower right has a few spikes
                             actual_box = box.determine_actual_boxes(
-                                ver_ratio=new_gaze.vertical_ratio(),
-                                hor_ratio=new_gaze.horizontal_ratio(),
+                                ver_ratio=gaze_tracking.vert_ratio(),
+                                hor_ratio=gaze_tracking.hori_ratio(),
                             )
-                            vert_value = actual_box[0]
-                            hori_value = actual_box[1]
+                            vert_val = actual_box[0]
+                            hori_val = actual_box[1]
                             # count the array up
-                            heatmap_array[vert_value][hori_value] = (
-                                heatmap_array[vert_value][hori_value] + 1
+                            heatmap_array[vert_val][hori_val] = (
+                                heatmap_array[vert_val][hori_val] + 1
                             )
-                        else:
-                            print("got none")
                 else:
-                    if upperleft is not True:
-                        cv2.putText(
+                    if upper_left is not True:
+                        cv.putText(
                             frame,
-                            "Look in the upper left corner and pres 'Q' on your keyboard",
+                            "Look in the upper left corner and pres 'Q' on your kb",
                             (20, 20),
-                            cv2.FONT_HERSHEY_DUPLEX,
+                            cv.FONT_HERSHEY_DUPLEX,
                             0.5,
                             (147, 58, 31),
                             1,
                         )
-                        if (
-                            keyboard.is_pressed("q")
-                            and new_gaze.vertical_ratio() is not None
-                        ):
-                            upperleft = True
-                            uppervalue = float(
-                                "{:.3f}".format(new_gaze.vertical_ratio())
+                        if (kb.is_pressed("q")):
+                            upper_left = True
+                            upper_val = float(
+                                "{:.3f}".format(gaze_tracking.vert_ratio())
                             )
-                    elif lowerright is not True:
-                        cv2.putText(
+                    elif lower_right is not True:
+                        cv.putText(
                             frame,
-                            "Look in the lower right corner and pres 'W' on your keyboard",
+                            "Look in the lower right corner and pres 'W' on your kb",
                             (20, 20),
-                            cv2.FONT_HERSHEY_DUPLEX,
+                            cv.FONT_HERSHEY_DUPLEX,
                             0.5,
                             (147, 58, 31),
                             1,
                         )
-                        if (
-                            keyboard.is_pressed("w")
-                            and new_gaze.vertical_ratio() is not None
-                        ):
-                            lowerright = True
-                            lowervalue = float(
-                                "{:.3f}".format(new_gaze.vertical_ratio())
-                            )
+                        if (kb.is_pressed("w")):
+                            lower_right = True
+                            lower_val = float("{:.3f}".format(gaze_tracking.vert_ratio()))
 
                     elif leftmost is not True:
-                        cv2.putText(
+                        cv.putText(
                             frame,
-                            "Look at the left most side and pres 'E' on your keyboard",
+                            "Look at the left most side and pres 'E' on your kb",
                             (20, 20),
-                            cv2.FONT_HERSHEY_DUPLEX,
+                            cv.FONT_HERSHEY_DUPLEX,
                             0.5,
                             (147, 58, 31),
                             1,
                         )
-                        if (
-                            keyboard.is_pressed("e")
-                            and new_gaze.horizontal_ratio() is not None
-                        ):
+                        if (kb.is_pressed("e")):
                             leftmost = True
-                            leftvalue = float(
-                                "{:.3f}".format(new_gaze.horizontal_ratio())
+                            left_val = float(
+                                "{:.3f}".format(gaze_tracking.hori_ratio())
                             )
 
                     elif rightmost is not True:
-                        cv2.putText(
+                        cv.putText(
                             frame,
-                            "Look at the right most side and pres 'R' on your keyboard",
+                            "Look at the right most side and pres 'R' on your kb",
                             (20, 20),
-                            cv2.FONT_HERSHEY_DUPLEX,
+                            cv.FONT_HERSHEY_DUPLEX,
                             0.5,
                             (147, 58, 31),
                             1,
                         )
-                        if (
-                            keyboard.is_pressed("r")
-                            and new_gaze.horizontal_ratio() is not None
-                        ):
+                        if (kb.is_pressed("r")):
                             rightmost = True
-                            rightvalue = float(
-                                "{:.3f}".format(new_gaze.horizontal_ratio())
+                            right_val = float(
+                                "{:.3f}".format(gaze_tracking.hori_ratio())
                             )
 
-                    if upperleft and lowerright and rightmost and leftmost:
+                    if upper_left and lower_right and rightmost and leftmost:
                         box = Box(
                             monitor=monitor,
-                            bounds=[uppervalue, lowervalue, leftvalue, rightvalue],
+                            bounds=[upper_val, lower_val, left_val, right_val],
                         )
                         initial_calibration = True
 
-                    gui.window["UPPERBOUND"].update(value=f"Upper bound = {uppervalue}")
-                    gui.window["LOWERBOUND"].update(value=f"Lower bound = {lowervalue}")
+                    gui.window["UPPERBOUND"].update(value=f"Upper bound = {upper_val}")
+                    gui.window["LOWERBOUND"].update(value=f"Lower bound = {lower_val}")
                     gui.window["LEFTBOUND"].update(
-                        value=f"Leftmost bound = {leftvalue}"
+                        value=f"Leftmost bound = {left_val}"
                     )
                     gui.window["RIGHTBOUND"].update(
-                        value=f"Rightmost bound = {rightvalue}"
+                        value=f"Rightmost bound = {right_val}"
                     )
 
-            imgbytes = cv2.imencode(".png", frame)[1].tobytes()
+            imgbytes = cv.imencode(".png", frame)[1].tobytes()
             gui.window["window"].update(data=imgbytes)
 
         if event == "_TOGGLE_":
             toggle = not toggle
             gui.window.Element("_TOGGLE_").Update(
-                ("TOGGLE ON", "TOGGLE OFF")[toggle],
-                button_color=((("dark green", "red")[toggle]), "grey44"),
+                ("SHOW", "HIDE")[toggle],
+                button_color=(("white", ("green", "red")[toggle])),
             )
-            gui.window["_NEWGAZE_"].update(value=toggle)
             if toggle:
                 cam.is_recording = True
                 cam.setsize(IMG_SIZE_W, IMG_SIZE_H)
-                gui.window["status"].update("Running")
+
             elif not toggle:
                 cam.is_recording = False
-                gui.window["status"].update("Stopped")
-
-                img = np.full((IMG_SIZE_H, IMG_SIZE_W), 255)
-                imgbytes = cv2.imencode(".png", img)[1].tobytes()
-                gui.window["window"].update(data=imgbytes)
 
         if capture_window:
             dir = os.path.join(RESOURCES_DIR, "windowfeed")
             file_name = "windowfeed.png"
             path = os.path.join(dir, file_name)
-            if p.system() == "Darwin":
+            if get_OS == "Darwin":
                 if sentinel > 50:
                     combo = values["SELECT"]
-                    window = Window(combo)
+                    window = WindowTitle(combo)
                     try:
                         window.take_screenshot_of_window_mac(path)
                         img = Image.open(path)
@@ -291,10 +273,8 @@ def main(screensize: int):
             else:
                 if sentinel > 20:
                     combo = values["SELECT"]
-                    window = Window(combo)
-                    dir = "resources/windowfeed/"
+                    window = WindowTitle(combo)
                     try:
-                        file_name = "windowfeed.png"
                         path = os.path.join(dir, file_name)
                         window.take_screenshot_of_window(path)
                         img = Image.open(path)
@@ -317,11 +297,11 @@ def main(screensize: int):
             )
 
             if generate_heatmap:
-                heatmap = Heatmap(data=heatmap_array, length=box.box_amount + 1)
+                heatmap = Heatmap(data=heatmap_array, length=box.box_amt + 1)
                 print(heatmap_array)
                 generate_heatmap = not generate_heatmap
             else:
-                heatmap_array = intialize_heatmap_array(box_amount=box.box_amount)
+                heatmap_array = intialise_heatmap_array(box_amt=box.box_amt)
                 generate_heatmap = not generate_heatmap
 
         elif event == "Apply":
@@ -354,7 +334,7 @@ if __name__ == "__main__":
     cam = Camera(device)
 
     gui.window["SIZETEXT"].update(value=f"Screen Size : {monitor_size} Inches")
-    intialize_heatmap_array(32)
+    intialise_heatmap_array(32)
 
     main(monitor_size)
 

@@ -34,9 +34,9 @@ class Gui:
             [sg.Text("Webcam", font=HEADER_FONT)],
             [
                 sg.Button(
-                    "OFF",
+                    "SHOW",
                     size=(5, 1),
-                    button_color=("white", "red"),
+                    button_color=("white", "green"),
                     key="_TOGGLE_",
                 )
             ],

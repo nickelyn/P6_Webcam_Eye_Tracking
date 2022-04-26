@@ -1,6 +1,6 @@
 import os
 import sys
-import cv2
+import cv2 as cv
 import dlib
 from math import hypot
 from distance_detection.distance_detector import DistanceDetector
@@ -13,7 +13,7 @@ from definitions import *
 
 import numpy as np
 
-font = cv2.FONT_HERSHEY_SIMPLEX
+font = cv.FONT_HERSHEY_SIMPLEX
 
 
 class Gaze:
@@ -27,10 +27,10 @@ class Gaze:
             os.path.join(DATA_DIR, "shape_predictor_68_face_landmarks.dat")
         )
         self.distance_detector = DistanceDetector()
-        self.ref_image = cv2.imread(os.path.join(DATA_DIR, "images/ref_image_new.jpg"))
+        self.ref_image = cv.imread(os.path.join(DATA_DIR, "images/ref_image_new.jpg"))
 
     def feed_frame(self, frame):
-        self.grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        self.grey = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
     def find_faces(self):
         self.faces = self.detector(self.grey)
@@ -98,8 +98,8 @@ def handle_faces(
 
 def lines_in_left_eye(frame, points):
     # Create the horizontal and vertical line (left eye)
-    le_horizontal_line = cv2.line(frame, points[0], points[1], (0, 255, 0), 1)
-    le_vertical_line = cv2.line(
+    le_horizontal_line = cv.line(frame, points[0], points[1], (0, 255, 0), 1)
+    le_vertical_line = cv.line(
         frame,
         points[2],
         points[3],
@@ -110,8 +110,8 @@ def lines_in_left_eye(frame, points):
 
 def lines_in_right_eye(frame, points):
     # Create the horizontal and vertical line (left eye)
-    re_horizontal_line = cv2.line(frame, points[4], points[5], (0, 255, 0), 1)
-    re_vertical_line = cv2.line(frame, points[6], points[7], (0, 255, 0), 1)
+    re_horizontal_line = cv.line(frame, points[4], points[5], (0, 255, 0), 1)
+    re_vertical_line = cv.line(frame, points[6], points[7], (0, 255, 0), 1)
 
 
 def find_points_in_eye(landmarks):
@@ -165,11 +165,11 @@ def find_vertical_and_horizontal_length_ratio(points: list, frame):
     ratio_RE = getRatio(re_horizontal_line_len, re_vertical_line_len)
 
     if ratio_LE > 4.7 and ratio_RE > 4.7:
-        cv2.putText(frame, "BOTH EYES CLOSED", (50, 150), font, 1, (0, 0, 255))
+        cv.putText(frame, "BOTH EYES CLOSED", (50, 150), font, 1, (0, 0, 255))
     elif ratio_LE > 4.7:
-        cv2.putText(frame, "RIGHT EYE CLOSED", (50, 150), font, 1, (0, 0, 255))
+        cv.putText(frame, "RIGHT EYE CLOSED", (50, 150), font, 1, (0, 0, 255))
     elif ratio_RE > 4.7:
-        cv2.putText(frame, "LEFT EYE CLOSED", (50, 150), font, 1, (0, 0, 255))
+        cv.putText(frame, "LEFT EYE CLOSED", (50, 150), font, 1, (0, 0, 255))
 
     # return [ratio_LE, ratio_RE]
 
@@ -200,8 +200,8 @@ def outline_eyes(landmarks, frame, outline=False):
     )
 
     if outline:
-        cv2.polylines(frame, [right_eye_outline], True, (0, 255, 0), 1)
-        cv2.polylines(frame, [left_eye_outline], True, (0, 255, 0), 1)
+        cv.polylines(frame, [right_eye_outline], True, (0, 255, 0), 1)
+        cv.polylines(frame, [left_eye_outline], True, (0, 255, 0), 1)
 
     return [left_eye_outline, right_eye_outline]
 
@@ -220,39 +220,39 @@ def calculate_ratio(frame, outlines: list, gaze: Gaze):
     max_y = np.max(outlines[0][:, 1])
 
     gray_eye = left_eye[min_y:max_y, min_x:max_x]
-    _, threshold_eye = cv2.threshold(gray_eye, 70, 255, cv2.THRESH_BINARY)
+    _, threshold_eye = cv.threshold(gray_eye, 70, 255, cv.THRESH_BINARY)
 
     heightShape, widthShape = threshold_eye.shape
 
     # Split the eye in 2 sides (left and right)
     left_side_threshold = threshold_eye[0:heightShape, 0 : int(widthShape / 2)]
-    left_side_white = cv2.countNonZero(left_side_threshold)
+    left_side_white = cv.countNonZero(left_side_threshold)
     right_side_threshold = threshold_eye[0:height, int(widthShape / 2) : widthShape]
-    right_side_white = cv2.countNonZero(right_side_threshold)
+    right_side_white = cv.countNonZero(right_side_threshold)
 
     # Calculate the gaze ratio
     gaze_ratio = (left_side_white + np.finfo(float).eps) / (
         right_side_white + np.finfo(float).eps
     )
     # Put ratio in the webcam feed
-    cv2.putText(frame, str(gaze_ratio), (50, 100), font, 2, (0, 255, 0), 3)
+    cv.putText(frame, str(gaze_ratio), (50, 100), font, 2, (0, 255, 0), 3)
     # Resize the scale
-    threshold_eye = cv2.resize(threshold_eye, None, fx=5, fy=5)
-    eye = cv2.resize(gray_eye, None, fx=5, fy=5)
+    threshold_eye = cv.resize(threshold_eye, None, fx=5, fy=5)
+    eye = cv.resize(gray_eye, None, fx=5, fy=5)
 
 
 def createMask(height, width, gray, eye_outline):
     # Create a mask of the entire face but the eyes
     mask = np.zeros((height, width), np.uint8)
-    cv2.polylines(mask, [eye_outline], True, 255, 2)
-    cv2.fillPoly(mask, [eye_outline], 255)
-    left_eye = cv2.bitwise_and(gray, gray, mask=mask)
+    cv.polylines(mask, [eye_outline], True, 255, 2)
+    cv.fillPoly(mask, [eye_outline], 255)
+    left_eye = cv.bitwise_and(gray, gray, mask=mask)
     return left_eye
 
 
 def handle_distance(gaze: Gaze, frame):
     gaze.distance_detector.get_distance_actual(frame)
-    cv2.putText(
+    cv.putText(
         frame,
         str(f"Distance = {gaze.distance_detector.distance}"),
         (50, 100),
