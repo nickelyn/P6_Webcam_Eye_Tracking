@@ -46,4 +46,3 @@ def convert_inches_to_cm(value: float):
     cm = value * 2.54
     cm = float("{:.1f}".format(cm))
     return cm
-
