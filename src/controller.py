@@ -1,4 +1,5 @@
 import io
+import sys
 import argparse
 
 import keyboard as kb
@@ -320,7 +321,7 @@ if __name__ == "__main__":
 
     if args.size == 0:
         print("Please add the screen size of your monitor with the --size argument!")
-        exit(1)
+        sys.exit(1)
 
     # Store camera argument
     device = args.camera
@@ -333,5 +334,3 @@ if __name__ == "__main__":
     intialise_heatmap_array(32)
 
     main(monitor_size)
-
-    # pyinstaller -c -F view.spec -y
