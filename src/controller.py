@@ -136,8 +136,8 @@ def main(screen_size: int):
                 if initial_calibration:
                     if recording:
                         if (
-                                gaze_tracking.hori_ratio() is None
-                                and gaze_tracking.vert_ratio() is None
+                            gaze_tracking.hori_ratio() is None
+                            and gaze_tracking.vert_ratio() is None
                         ):
                             return
                         else:
@@ -150,7 +150,7 @@ def main(screen_size: int):
                             hori_val = actual_box[1]
                             # count the array up
                             heatmap_array[vert_val][hori_val] = (
-                                    heatmap_array[vert_val][hori_val] + 1
+                                heatmap_array[vert_val][hori_val] + 1
                             )
                 else:
                     if upper_left is not True:
@@ -163,7 +163,10 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if kb.is_pressed("q") and gaze_tracking.vert_ratio() is not None:
+                        if (
+                            kb.is_pressed("q")
+                            and gaze_tracking.vert_ratio() is not None
+                        ):
                             upper_left = True
                             upper_val = float(
                                 "{:.3f}".format(gaze_tracking.vert_ratio())
@@ -178,7 +181,10 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if kb.is_pressed("w") and gaze_tracking.vert_ratio() is not None:
+                        if (
+                            kb.is_pressed("w")
+                            and gaze_tracking.vert_ratio() is not None
+                        ):
                             lower_right = True
                             lower_val = float(
                                 "{:.3f}".format(gaze_tracking.vert_ratio())
@@ -194,7 +200,10 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if kb.is_pressed("e") and gaze_tracking.hori_ratio() is not None:
+                        if (
+                            kb.is_pressed("e")
+                            and gaze_tracking.hori_ratio() is not None
+                        ):
                             leftmost = True
                             left_val = float(
                                 "{:.3f}".format(gaze_tracking.hori_ratio())
@@ -210,7 +219,10 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if kb.is_pressed("r") and gaze_tracking.hori_ratio() is not None:
+                        if (
+                            kb.is_pressed("r")
+                            and gaze_tracking.hori_ratio() is not None
+                        ):
                             rightmost = True
                             right_val = float(
                                 "{:.3f}".format(gaze_tracking.hori_ratio())
@@ -288,7 +300,9 @@ def main(screen_size: int):
         # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
         elif event == "_RECORDING_":
             if not initial_calibration:
-                gui.popup("You cannot start a recording before doing the initial calibration")
+                gui.popup(
+                    "You cannot start a recording before doing the initial calibration"
+                )
             else:
                 # TODO : Add popup that does not allow this before initial calibration
                 recording = not recording
@@ -311,13 +325,16 @@ def main(screen_size: int):
             else:
                 capture_window = True
 
-        if event in (sg.WIN_CLOSED, 'Quit'):
+        if event in (sg.WIN_CLOSED, "Quit"):
             gui.window.close()
             return
 
 
 if __name__ == "__main__":
-    popup = PopUp("Please enter your desired webcam index (0=Internal, 1...X = External)", "Choose webcam index")
+    popup = PopUp(
+        "Please enter your desired webcam index (0=Internal, 1...X = External)",
+        "Choose webcam index",
+    )
     device = int(popup.text_input)
     popup = PopUp("Please enter your monitor size in inches", "Monitor size")
     monitor_size = int(popup.text_input)

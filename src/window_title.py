@@ -9,7 +9,6 @@ class WindowTitle:
         self.point1 = None
         self.point2 = None
 
-
     def get_window(self):
         return pygetwindow.getWindowsWithTitle(self.name)[0]
 

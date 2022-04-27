@@ -16,7 +16,6 @@ class Gui:
     Used to execute the interface
     """
 
-
     def popup(self, message: str):
         sg.popup(message)
 
