@@ -9,6 +9,7 @@ class Heatmap:
 
 
 def produce_heatmap(data: list, length: int):
+    # TODO :  Needs to rezize the image, and should only show the values that are within the borders to the application chosen for the test
     plt.style.use("seaborn")
     plt.figure(figsize=(length, length))
     heatmap = sns.heatmap(np.array(data), linewidth=1, annot=True)
