@@ -6,6 +6,9 @@ from PIL import Image
 class WindowTitle:
     def __init__(self, windowname: str):
         self.name = windowname
+        self.point1 = None
+        self.point2 = None
+
 
     def get_window(self):
         return pygetwindow.getWindowsWithTitle(self.name)[0]
@@ -15,15 +18,12 @@ class WindowTitle:
 
     def take_screenshot_of_window(self, path: str):
         window = pygetwindow.getWindowsWithTitle(self.name)[0]
-        x0 = window.topleft
-        height = window.height
-        width = window.width
-        x2 = x0.x + width
-        y2 = x0.y + height
+        self.point1 = window.topleft
+        self.point2 = window.bottomright
 
         pyautogui.screenshot(path)
         im = Image.open(path)
-        im = im.crop((x0.x, x0.y, x2, y2))
+        im = im.crop((self.point1.x, self.point1.y, self.point2.x, self.point2.y))
         im.save(path)
 
     def take_screenshot_of_window_mac(self, path: str):

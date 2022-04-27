@@ -16,8 +16,13 @@ class Gui:
     Used to execute the interface
     """
 
+
+    def popup(self, message: str):
+        sg.popup(message)
+
     @staticmethod
     def make_window():
+
         """
         Creates a window
         """
@@ -35,16 +40,23 @@ class Gui:
             [
                 sg.Button(
                     "SHOW",
-                    size=(5, 1),
-                    button_color=("white", "green"),
+                    size=(12, 1),
+                    button_color=("dark green", "grey44"),
                     key="_TOGGLE_",
                 )
             ],
         ]
 
         button_controls = [
-            [sg.Text("Status:", font=HEADER_FONT), sg.Text("", key="status")],
-            [sg.Button("Record"), sg.Button("Stop")],
+            [sg.Text("Status:", font=HEADER_FONT), sg.Text("Stopped", key="status")],
+            [
+                sg.Button(
+                    "RECORD",
+                    size=(8, 1),
+                    button_color=("dark green", "grey44"),
+                    key="_RECORDING_",
+                )
+            ],
         ]
 
         select_window = [

@@ -5,6 +5,7 @@ import keyboard as kb
 import pygetwindow
 from gui import *
 from PIL import Image
+from popup import PopUp
 
 from camera import *
 from eyegaze import *
@@ -135,8 +136,8 @@ def main(screen_size: int):
                 if initial_calibration:
                     if recording:
                         if (
-                            gaze_tracking.hori_ratio() is None
-                            and gaze_tracking.vert_ratio() is None
+                                gaze_tracking.hori_ratio() is None
+                                and gaze_tracking.vert_ratio() is None
                         ):
                             return
                         else:
@@ -149,7 +150,7 @@ def main(screen_size: int):
                             hori_val = actual_box[1]
                             # count the array up
                             heatmap_array[vert_val][hori_val] = (
-                                heatmap_array[vert_val][hori_val] + 1
+                                    heatmap_array[vert_val][hori_val] + 1
                             )
                 else:
                     if upper_left is not True:
@@ -162,7 +163,7 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if kb.is_pressed("q"):
+                        if kb.is_pressed("q") and gaze_tracking.vert_ratio() is not None:
                             upper_left = True
                             upper_val = float(
                                 "{:.3f}".format(gaze_tracking.vert_ratio())
@@ -177,7 +178,7 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if kb.is_pressed("w"):
+                        if kb.is_pressed("w") and gaze_tracking.vert_ratio() is not None:
                             lower_right = True
                             lower_val = float(
                                 "{:.3f}".format(gaze_tracking.vert_ratio())
@@ -193,7 +194,7 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if kb.is_pressed("e"):
+                        if kb.is_pressed("e") and gaze_tracking.hori_ratio() is not None:
                             leftmost = True
                             left_val = float(
                                 "{:.3f}".format(gaze_tracking.hori_ratio())
@@ -209,7 +210,7 @@ def main(screen_size: int):
                             (147, 58, 31),
                             1,
                         )
-                        if kb.is_pressed("r"):
+                        if kb.is_pressed("r") and gaze_tracking.hori_ratio() is not None:
                             rightmost = True
                             right_val = float(
                                 "{:.3f}".format(gaze_tracking.hori_ratio())
@@ -286,19 +287,23 @@ def main(screen_size: int):
 
         # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
         elif event == "_RECORDING_":
-            recording = not recording
-            gui.window.Element("_RECORDING_").Update(
-                ("RECORD", "STOP")[recording],
-                button_color=((("dark green", "red")[recording], "grey44")),
-            )
-
-            if generate_heatmap:
-                heatmap = Heatmap(data=heatmap_array, length=box.box_amt + 1)
-                print(heatmap_array)
-                generate_heatmap = not generate_heatmap
+            if not initial_calibration:
+                gui.popup("You cannot start a recording before doing the initial calibration")
             else:
-                heatmap_array = intialise_heatmap_array(box_amt=box.box_amt)
-                generate_heatmap = not generate_heatmap
+                # TODO : Add popup that does not allow this before initial calibration
+                recording = not recording
+                gui.window.Element("_RECORDING_").Update(
+                    ("RECORD", "STOP")[recording],
+                    button_color=(("dark green", "red")[recording], "grey44"),
+                )
+
+                if generate_heatmap:
+                    heatmap = Heatmap(data=heatmap_array, length=box.box_amount + 1)
+                    print(heatmap_array)
+                    generate_heatmap = not generate_heatmap
+                else:
+                    heatmap_array = intialise_heatmap_array(box_amt=box.box_amount)
+                    generate_heatmap = not generate_heatmap
 
         elif event == "Apply":
             if capture_window:
@@ -306,25 +311,16 @@ def main(screen_size: int):
             else:
                 capture_window = True
 
-        if event == "Exit" or event == sg.WIN_CLOSED:
+        if event in (sg.WIN_CLOSED, 'Quit'):
             gui.window.close()
             return
 
 
 if __name__ == "__main__":
-    # Optional arguments if camera type is different from 0
-    parser = argparse.ArgumentParser(description="webcam eye tracking.")
-    parser.add_argument("--camera", help="Camera divide number.", type=int, default=0)
-    parser.add_argument("--size", help="Screen size in inches.", type=int, default=0)
-    args = parser.parse_args()
-
-    if args.size == 0:
-        print("Please add the screen size of your monitor with the --size argument!")
-        exit(1)
-
-    # Store camera argument
-    device = args.camera
-    monitor_size = args.size
+    popup = PopUp("Please enter your desired webcam index (0=Internal, 1...X = External)", "Choose webcam index")
+    device = int(popup.text_input)
+    popup = PopUp("Please enter your monitor size in inches", "Monitor size")
+    monitor_size = int(popup.text_input)
 
     gui = Gui()
     cam = Camera(device)
