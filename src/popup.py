@@ -7,8 +7,11 @@ class PopUp:
         window = sg.Window(title, layout)
 
         _, values = window.read()
-        self.text_input = values[0]
-        window.close()
+        try:
+            self.text_input = values[0]
+            window.close()
+        except KeyError:
+            self.text_input = None
 
     def __init__(self, name: str, title: str):
         self.text_input = None

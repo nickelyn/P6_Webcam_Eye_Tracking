@@ -7,7 +7,6 @@ import pygetwindow
 from gui import *
 from PIL import Image
 from popup import PopUp
-
 from camera import *
 from eyegaze import *
 import gaze as gz
@@ -27,6 +26,16 @@ from definitions import *
 IMG_SIZE_W = 400
 IMG_SIZE_H = 400
 
+# input_field = [
+#     [sg.Text("")], 
+#     [sg.InputText()], 
+#     [sg.Submit(), sg.Cancel()]
+# ]
+
+# confirmation = [
+#     [sg.Text("")],  
+#     [sg.Submit()]
+# ]
 
 def calibrate_monitor(screen_size: int):
     monitor = Monitor(screen_size)
@@ -303,7 +312,6 @@ def main(screen_size: int):
             if not initial_calibration:
                 gui.popup(dialogue.get(4))
             else:
-                # TODO : Add popup that does not allow this before initial calibration
                 recording = not recording
                 gui.window.Element("_RECORDING_").Update(
                     ("RECORD", "STOP")[recording],
@@ -330,21 +338,22 @@ def main(screen_size: int):
 
 
 if __name__ == "__main__":
-
+    gui = Gui()
     while True:
         try:
-            popup = PopUp(dialogue.get(0), dialogue.get(1),)
+            # TODO: Store in a config file after first run
+            popup = PopUp(dialogue.get(0), dialogue.get(1))#, input_field)
             device = int(popup.text_input)
-            popup = PopUp(dialogue.get(2), dialogue.get(3),)
+            popup = PopUp(dialogue.get(2), dialogue.get(3))#, input_field)
             monitor_size = int(popup.text_input)
+            gui.window["SIZETEXT"].update(f"Screen size: {monitor_size} inches")    
             break
         except ValueError:
-            print(exceptions.get(0))
+            gui.popup(exceptions.get(0))#, confirmation)
+        except TypeError:
+            gui.popup(exceptions.get(1))
 
-    gui = Gui()
     cam = Camera(device)
-
-    gui.window["SIZETEXT"].update(value=f"Screen Size : {monitor_size} Inches")
-    intialise_heatmap_array(32)
+    #intialise_heatmap_array(32)
 
     main(monitor_size)

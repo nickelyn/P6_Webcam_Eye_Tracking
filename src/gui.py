@@ -13,7 +13,7 @@ dialogue = {
     1: "Choose webcam index",
     2: "Please enter your monitor size in inches!",
     3: "Monitor size",
-    4: "You cannot start a recording before doing the initial calibration",
+    4: "Please calibrate before attempting to record!",
     5: "",
     6: "File not found!",
     7: "Look in the upper left corner and press 'Q' on your keyboard",
@@ -22,7 +22,10 @@ dialogue = {
     10: "Look at the right most side and press 'R' on your keyboard",
 }
 
-exceptions = {0: "Please enter a valid integer number!"}
+exceptions = {
+    0: "Please enter a valid integer number!",
+    1: "Argument must be a real number, not 'NoneType'!"
+}
 
 
 class Gui:
@@ -122,11 +125,11 @@ class Gui:
         right_col = [
             [sg.Column(camera_feed, justification="center")],
             [sg.Column(window_feed)],
-            [sg.Column(button_controls), sg.Column(toggle), sg.Column(select_window),],
+            [sg.Column(button_controls), sg.Column(toggle), sg.Column(select_window)],
         ]
 
         layout = [
-            [sg.vtop(sg.Column(left_col)), sg.VSeperator(), sg.Column(right_col),]
+            [sg.vtop(sg.Column(left_col)), sg.VSeperator(), sg.Column(right_col, justification="bottom")]
         ]
 
         window = sg.Window(

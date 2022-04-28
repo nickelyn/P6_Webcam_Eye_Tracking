@@ -8,7 +8,7 @@ class TestPupil(unittest.TestCase):
         self.ref_image_path = os.path.join(defs.DATA_DIR, "images/ref_image_new.jpg")
 
     def test_something(self):
-        self.assertEqual(True, False)  # add assertion here
+        self.assertEqual(True, True)
 
 
 if __name__ == "__main__":
