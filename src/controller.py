@@ -1,3 +1,4 @@
+import configparser
 import io
 import sys
 import argparse
@@ -17,6 +18,7 @@ from gaze_calculator.boxes import Box
 from gaze_calculator.heatmapper import Heatmap
 import platform as p
 from window_title import WindowTitle
+from settings import Settings
 
 # Necessary to traverse up the directory tree
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -25,17 +27,6 @@ from definitions import *
 
 IMG_SIZE_W = 400
 IMG_SIZE_H = 400
-
-# input_field = [
-#     [sg.Text("")], 
-#     [sg.InputText()], 
-#     [sg.Submit(), sg.Cancel()]
-# ]
-
-# confirmation = [
-#     [sg.Text("")],  
-#     [sg.Submit()]
-# ]
 
 def calibrate_monitor(screen_size: int):
     monitor = Monitor(screen_size)
@@ -339,20 +330,31 @@ def main(screen_size: int):
 
 if __name__ == "__main__":
     gui = Gui()
-    while True:
-        try:
-            # TODO: Store in a config file after first run
-            popup = PopUp(dialogue.get(0), dialogue.get(1))#, input_field)
-            device = int(popup.text_input)
-            popup = PopUp(dialogue.get(2), dialogue.get(3))#, input_field)
-            monitor_size = int(popup.text_input)
-            gui.window["SIZETEXT"].update(f"Screen size: {monitor_size} inches")    
-            break
-        except ValueError:
-            gui.popup(exceptions.get(0))#, confirmation)
-        except TypeError:
-            gui.popup(exceptions.get(1))
+    settings = Settings()
 
+    # TODO: Check for illegal input.
+    if settings.config.has_option('SETTINGS', 'monitor_size'):
+        monitor_size = int(settings.get_setting('SETTINGS', 'monitor_size'))
+    if settings.config.has_option('SETTINGS', 'camera_type'):
+        device = int(settings.get_setting('SETTINGS', 'camera_type'))
+    else:
+        while True:
+            try:
+                popup = PopUp(dialogue.get(0), dialogue.get(1))
+                device = int(popup.text_input)
+                popup = PopUp(dialogue.get(2), dialogue.get(3))
+                monitor_size = int(popup.text_input)
+                break
+            except ValueError:
+                gui.popup(exceptions.get(0))
+            except TypeError:
+                gui.popup(exceptions.get(1))
+        settings.config['SETTINGS']['camera_type'] = str(device)
+        settings.config['SETTINGS']['monitor_size'] = str(monitor_size)
+        with open ('settings.cfg', 'w') as configfile:
+            settings.config.write(configfile)
+
+    gui.window["SIZETEXT"].update(f"Screen size: {monitor_size} inches")    
     cam = Camera(device)
     #intialise_heatmap_array(32)
 
