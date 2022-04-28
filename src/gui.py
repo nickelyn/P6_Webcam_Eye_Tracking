@@ -1,12 +1,28 @@
 import PySimpleGUI as sg
 
 APP_NAME = "Webcamera Usability Testing"
-APP_VERSION = "v0.1"
+APP_VERSION = "v1.1"
 
 search_icon = b"iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVQ4T2NkwA2YgFL/8MiDpRjRFAgD+aVALAvEv4GYFYj/A/EcID6AzTBkA9SACrqBuAqIryIp5gSyq4H4ExB3oRsCMwBk01ogjgPiDzicXQMUPw/EW5HlYQZEQ528Co+fQZYsBeIwbAaA/JgLxN/xGACSmgbElUD8EaYO5oLFQIFYAppB0k1AvACI76EbMAUoUA/EbwkYMhcon4PsUpgLXIGCmkA8CY8BAlB5UEDDAXI0LgOKNgPxdSyGgBIVyPZ+IL6EywCQDbOBeAsQrwDin1CFulDv6UENmI7LAJA4yKYQIPYEYmYovgOkQaHvC8QzgTgfiEFhBgboSRmL61GEUtANIdUAkGkohpBjAMiQTCA2BOI0cg2A+wsAV68vEVbw9/oAAAAASUVORK5CYII="
 
 
 WINDOW_LIST = list()
+
+dialogue = {
+    0: "Please enter your desired webcam index (0=Internal, 1...X = External)!",
+    1: "Choose webcam index",
+    2: "Please enter your monitor size in inches!",
+    3: "Monitor size",
+    4: "You cannot start a recording before doing the initial calibration",
+    5: "",
+    6: "File not found!",
+    7: "Look in the upper left corner and press 'Q' on your keyboard",
+    8: "Look in the lower right corner and press 'W' on your keyboard",
+    9: "Look at the left most side and press 'E' on your keyboard",
+    10: "Look at the right most side and press 'R' on your keyboard",
+}
+
+exceptions = {0: "Please enter a valid integer number!"}
 
 
 class Gui:
@@ -27,7 +43,7 @@ class Gui:
         """
         THEME = "Dark Grey"
         HEADER_FONT = "Dosis 14 bold"
-        DEFAULT_FONT = "Dosis 12"
+        DEFAULT_FONT = "Dosis 10"
         sg.theme(THEME)
 
         camera_feed = [[sg.Image(filename="", key="frame")]]
@@ -106,19 +122,11 @@ class Gui:
         right_col = [
             [sg.Column(camera_feed, justification="center")],
             [sg.Column(window_feed)],
-            [
-                sg.Column(button_controls),
-                sg.Column(toggle),
-                sg.Column(select_window),
-            ],
+            [sg.Column(button_controls), sg.Column(toggle), sg.Column(select_window),],
         ]
 
         layout = [
-            [
-                sg.vtop(sg.Column(left_col)),
-                sg.VSeperator(),
-                sg.Column(right_col),
-            ]
+            [sg.vtop(sg.Column(left_col)), sg.VSeperator(), sg.Column(right_col),]
         ]
 
         window = sg.Window(

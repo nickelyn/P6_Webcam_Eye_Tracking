@@ -157,7 +157,7 @@ def main(screen_size: int):
                     if upper_left is not True:
                         cv.putText(
                             frame,
-                            "Look in the upper left corner and pres 'Q' on your kb",
+                            dialogue.get(7),
                             (20, 20),
                             cv.FONT_HERSHEY_DUPLEX,
                             0.5,
@@ -175,7 +175,7 @@ def main(screen_size: int):
                     elif lower_right is not True:
                         cv.putText(
                             frame,
-                            "Look in the lower right corner and pres 'W' on your kb",
+                            dialogue.get(8),
                             (20, 20),
                             cv.FONT_HERSHEY_DUPLEX,
                             0.5,
@@ -194,7 +194,7 @@ def main(screen_size: int):
                     elif leftmost is not True:
                         cv.putText(
                             frame,
-                            "Look at the left most side and pres 'E' on your kb",
+                            dialogue.get(9),
                             (20, 20),
                             cv.FONT_HERSHEY_DUPLEX,
                             0.5,
@@ -213,7 +213,7 @@ def main(screen_size: int):
                     elif rightmost is not True:
                         cv.putText(
                             frame,
-                            "Look at the right most side and pres 'R' on your kb",
+                            dialogue.get(10),
                             (20, 20),
                             cv.FONT_HERSHEY_DUPLEX,
                             0.5,
@@ -276,7 +276,7 @@ def main(screen_size: int):
                         gui.window["frame"].update(data=bio.getvalue())
                         sentinel = 0
                     except FileNotFoundError:
-                        print("MacOS: File not found")
+                        print(f"MacOS: {dialogue.get(6)}")
                         os.makedirs(dir)
 
                 sentinel = sentinel + 1
@@ -294,16 +294,14 @@ def main(screen_size: int):
                         gui.window["frame"].update(data=bio.getvalue())
                         sentinel = 0
                     except FileNotFoundError:
-                        print("Windows: File not found")
+                        print(f"Windows: {dialogue.get(6)}")
                         os.makedirs(dir)
                 sentinel += 1
 
         # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
         elif event == "_RECORDING_":
             if not initial_calibration:
-                gui.popup(
-                    "You cannot start a recording before doing the initial calibration"
-                )
+                gui.popup(dialogue.get(4))
             else:
                 # TODO : Add popup that does not allow this before initial calibration
                 recording = not recording
@@ -332,13 +330,16 @@ def main(screen_size: int):
 
 
 if __name__ == "__main__":
-    popup = PopUp(
-        "Please enter your desired webcam index (0=Internal, 1...X = External)",
-        "Choose webcam index",
-    )
-    device = int(popup.text_input)
-    popup = PopUp("Please enter your monitor size in inches", "Monitor size")
-    monitor_size = int(popup.text_input)
+
+    while True:
+        try:
+            popup = PopUp(dialogue.get(0), dialogue.get(1),)
+            device = int(popup.text_input)
+            popup = PopUp(dialogue.get(2), dialogue.get(3),)
+            monitor_size = int(popup.text_input)
+            break
+        except ValueError:
+            print(exceptions.get(0))
 
     gui = Gui()
     cam = Camera(device)

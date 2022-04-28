@@ -2,12 +2,13 @@ import unittest
 import os
 import sys
 
+
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)
 
 from src.gui import Gui
 
-
+# Does not work on Linux
 class TestGUI(unittest.TestCase):
     def test_gui(self):
         self.gui = Gui()

@@ -3,7 +3,7 @@ import platform as p
 
 
 class Camera:
-    def __init__(self, device):
+    def __init__(self, device: int):
         self.device = device
         if get_OS() == "Darwin":
             self.capture = cv.VideoCapture(device, cv.CAP_AVFOUNDATION)
@@ -15,7 +15,7 @@ class Camera:
         if not self.capture.isOpened():
             exit()
 
-    def setsize(self, width, height):
+    def setsize(self, width: int, height: int):
         self.capture.set(cv.CAP_PROP_FRAME_WIDTH, width)
         self.capture.set(cv.CAP_PROP_FRAME_HEIGHT, height)
 

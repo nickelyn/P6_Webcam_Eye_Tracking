@@ -4,8 +4,8 @@ from PIL import Image
 
 
 class WindowTitle:
-    def __init__(self, windowname: str):
-        self.name = windowname
+    def __init__(self, window_name: str):
+        self.name = window_name
         self.point1 = None
         self.point2 = None
 
