@@ -28,6 +28,7 @@ from definitions import *
 IMG_SIZE_W = 400
 IMG_SIZE_H = 400
 
+
 def calibrate_monitor(screen_size: int):
     monitor = Monitor(screen_size)
     monitor.get_monitor_dimension()
@@ -333,10 +334,10 @@ if __name__ == "__main__":
     settings = Settings()
 
     # TODO: Check for illegal input.
-    if settings.config.has_option('SETTINGS', 'monitor_size'):
-        monitor_size = int(settings.get_setting('SETTINGS', 'monitor_size'))
-    if settings.config.has_option('SETTINGS', 'camera_type'):
-        device = int(settings.get_setting('SETTINGS', 'camera_type'))
+    if settings.config.has_option("SETTINGS", "monitor_size"):
+        monitor_size = int(settings.get_setting("SETTINGS", "monitor_size"))
+    if settings.config.has_option("SETTINGS", "camera_type"):
+        device = int(settings.get_setting("SETTINGS", "camera_type"))
     else:
         while True:
             try:
@@ -349,12 +350,12 @@ if __name__ == "__main__":
                 gui.popup(exceptions.get(0))
             except TypeError:
                 gui.popup(exceptions.get(1))
-        settings.config['SETTINGS']['camera_type'] = str(device)
-        settings.config['SETTINGS']['monitor_size'] = str(monitor_size)
-        with open ('settings.cfg', 'w') as configfile:
+        settings.config["SETTINGS"]["camera_type"] = str(device)
+        settings.config["SETTINGS"]["monitor_size"] = str(monitor_size)
+        with open("settings.cfg", "w") as configfile:
             settings.config.write(configfile)
 
-    gui.window["SIZETEXT"].update(f"Screen size: {monitor_size} inches")    
+    gui.window["SIZETEXT"].update(f"Screen size: {monitor_size} inches")
     cam = Camera(device)
     # intialise_heatmap_array(32)
 
