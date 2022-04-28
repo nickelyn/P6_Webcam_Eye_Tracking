@@ -27,15 +27,16 @@ IMG_SIZE_W = 400
 IMG_SIZE_H = 400
 
 # input_field = [
-#     [sg.Text("")], 
-#     [sg.InputText()], 
+#     [sg.Text("")],
+#     [sg.InputText()],
 #     [sg.Submit(), sg.Cancel()]
 # ]
 
 # confirmation = [
-#     [sg.Text("")],  
+#     [sg.Text("")],
 #     [sg.Submit()]
 # ]
+
 
 def calibrate_monitor(screen_size: int):
     monitor = Monitor(screen_size)
@@ -342,18 +343,18 @@ if __name__ == "__main__":
     while True:
         try:
             # TODO: Store in a config file after first run
-            popup = PopUp(dialogue.get(0), dialogue.get(1))#, input_field)
+            popup = PopUp(dialogue.get(0), dialogue.get(1))  # , input_field)
             device = int(popup.text_input)
-            popup = PopUp(dialogue.get(2), dialogue.get(3))#, input_field)
+            popup = PopUp(dialogue.get(2), dialogue.get(3))  # , input_field)
             monitor_size = int(popup.text_input)
-            gui.window["SIZETEXT"].update(f"Screen size: {monitor_size} inches")    
+            gui.window["SIZETEXT"].update(f"Screen size: {monitor_size} inches")
             break
         except ValueError:
-            gui.popup(exceptions.get(0))#, confirmation)
+            gui.popup(exceptions.get(0))  # , confirmation)
         except TypeError:
             gui.popup(exceptions.get(1))
 
     cam = Camera(device)
-    #intialise_heatmap_array(32)
+    # intialise_heatmap_array(32)
 
     main(monitor_size)
