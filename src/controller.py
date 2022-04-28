@@ -356,6 +356,6 @@ if __name__ == "__main__":
 
     gui.window["SIZETEXT"].update(f"Screen size: {monitor_size} inches")    
     cam = Camera(device)
-    #intialise_heatmap_array(32)
+    # intialise_heatmap_array(32)
 
     main(monitor_size)

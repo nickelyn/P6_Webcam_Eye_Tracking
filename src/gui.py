@@ -24,7 +24,7 @@ dialogue = {
 
 exceptions = {
     0: "Please enter a valid integer number!",
-    1: "Argument must be a real number, not 'NoneType'!"
+    1: "Argument must be a real number, not 'NoneType'!",
 }
 
 
@@ -129,7 +129,11 @@ class Gui:
         ]
 
         layout = [
-            [sg.vtop(sg.Column(left_col)), sg.VSeperator(), sg.Column(right_col, justification="bottom")]
+            [
+                sg.vtop(sg.Column(left_col)),
+                sg.VSeperator(),
+                sg.Column(right_col),
+            ]
         ]
 
         window = sg.Window(
