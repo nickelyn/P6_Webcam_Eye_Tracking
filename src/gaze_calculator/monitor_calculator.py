@@ -25,7 +25,6 @@ class Monitor:
             self.aspect_ratio = [32, 9]
         elif ratio == 1.33:
             self.aspect_ratio = [4, 3]
-        raise Exception
 
     def get_monitor_dimension(self):
         monitors = get_monitors()
