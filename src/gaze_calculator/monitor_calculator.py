@@ -16,6 +16,7 @@ class Monitor:
     def calculate_aspect_ratio(self):
         ratio = self.pixels_width / self.pixels_height
         ratio = float("{:.2f}".format(ratio))
+        # TODO: Add more support for ratios? poor way of implementing it.
         if ratio == 1.78:
             self.aspect_ratio = [16, 9]
         elif ratio == 1.33:
