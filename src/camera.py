@@ -1,3 +1,5 @@
+import sys
+
 import cv2 as cv
 import platform as p
 
@@ -13,7 +15,7 @@ class Camera:
         self.is_recording = False
 
         if not self.capture.isOpened():
-            exit()
+            sys.exit()
 
     def setsize(self, width: int, height: int):
         self.capture.set(cv.CAP_PROP_FRAME_WIDTH, width)
