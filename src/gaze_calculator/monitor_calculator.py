@@ -18,9 +18,14 @@ class Monitor:
         ratio = float("{:.2f}".format(ratio))
         if ratio == 1.78:
             self.aspect_ratio = [16, 9]
+        elif ratio == 2.37:
+            self.aspect_ratio = [21,9]
+        elif ratio == 3.56:
+            self.aspect_ratio = [32, 9]
         elif ratio == 1.33:
             self.aspect_ratio = [4, 3]
-
+        raise Exception
+    
     def get_monitor_dimension(self):
         monitors = get_monitors()
         for m in monitors:
