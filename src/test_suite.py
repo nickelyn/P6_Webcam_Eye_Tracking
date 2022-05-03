@@ -1,4 +1,9 @@
+import os
+import sys
 import unittest
+
+parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent)
 
 from tests.test_window_title import *
 from tests.test_boxes import *
