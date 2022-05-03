@@ -7,7 +7,7 @@ class TestMonitorCalc(unittest.TestCase):
         monitor = Monitor(diagonal=27)
         self.monitor = monitor
 
-    def test_calculate_aspect_ration(self):
+    def test_calculate_aspect_ratio(self):
         # ARRANGE
         self.monitor.pixels_height = 1440
         self.monitor.pixels_width = 2560
@@ -44,6 +44,9 @@ class TestMonitorCalc(unittest.TestCase):
         # ASSERT
         self.assertEqual(self.monitor.height, 33.6)
         self.assertEqual(self.monitor.width, 59.8)
+
+    def tearDown(self):
+        del self.monitor
 
 
 if __name__ == "__main__":

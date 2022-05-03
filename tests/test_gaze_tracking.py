@@ -21,11 +21,13 @@ class TestGazeTracking(unittest.TestCase):
         self.frame_closed = np.array(image)
         image.close()
 
+
+    # This test also test the Eye.py by default
     def test_refresh_frame(self):
         self.gazetracker.refresh(self.frame)
 
-        self.assertNotEqual(self.gazetracker.eye_left, None)
-        self.assertNotEqual(self.gazetracker.eye_right, None)
+        self.assertIsNotNone(self.gazetracker.eye_left)
+        self.assertIsNotNone(self.gazetracker.eye_right)
 
     def test_pupils_located(self):
         # Arrange
@@ -50,21 +52,55 @@ class TestGazeTracking(unittest.TestCase):
 
     def test_blinking(self):
         self.gazetracker.refresh(self.frame)
+        self.gazetracker.annotated_frame()
         blinking = self.gazetracker.is_blinking()
         self.gazetracker.refresh(self.frame_closed)
+        self.gazetracker.annotated_frame()
         blinking_true = self.gazetracker.is_blinking()
 
         self.assertEqual(False, blinking)
+        self.assertEqual(None, blinking_true)
 
     def test_ratios(self):
         self.gazetracker.refresh(self.frame)
+        self.gazetracker.annotated_frame()
 
         hor = self.gazetracker.hori_ratio()
         ver = self.gazetracker.vert_ratio()
-        # If the pupils are located, the ratios will not be none
+
         self.assertIsNotNone(hor)
         self.assertIsNotNone(ver)
 
+    def test_eye_blinking(self):
+        self.gazetracker.refresh(self.frame)
+
+        right_blink = self.gazetracker.eye_right.blinking
+        left_blink = self.gazetracker.eye_left.blinking
+
+        self.assertIsNotNone(right_blink)
+        self.assertIsNotNone(left_blink)
+
+    def test_pupil_iris_frame(self):
+        self.gazetracker.refresh(self.frame)
+
+        iris_frame_left = self.gazetracker.eye_left.pupil.iris_frame
+        iris_frame_right = self.gazetracker.eye_right.pupil.iris_frame
+
+        self.assertIsNotNone(iris_frame_left)
+        self.assertIsNotNone(iris_frame_right)
+
+    def test_pupil_x_and_y(self):
+        self.gazetracker.refresh(self.frame)
+
+        left_pupil_x = self.gazetracker.eye_left.pupil.x
+        left_pupil_y = self.gazetracker.eye_left.pupil.y
+        right_pupil_x = self.gazetracker.eye_right.pupil.x
+        right_pupil_y = self.gazetracker.eye_right.pupil.y
+
+        self.assertIsNotNone(left_pupil_y)
+        self.assertIsNotNone(left_pupil_x)
+        self.assertIsNotNone(right_pupil_y)
+        self.assertIsNotNone(right_pupil_x)
 
 if __name__ == "__main__":
     unittest.main()

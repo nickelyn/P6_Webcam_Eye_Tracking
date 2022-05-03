@@ -46,7 +46,6 @@ def intialise_heatmap_array(box_amt: int):
 
 def main(screen_size: int):
     toggle = False
-    window_title = WindowTitle("")
     titles_found = False
     capture_window = False
     initial_calibration = False
@@ -75,7 +74,7 @@ def main(screen_size: int):
         if titles_found:
             pass
         else:
-            titles_list = window_title.get_titles_list()
+            titles_list = WindowTitle.get_titles_list()
             if p.system() != "Darwin":
                 for title in titles_list:
                     # TODO: Sometimes returns out of range error

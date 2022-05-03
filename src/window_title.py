@@ -10,10 +10,17 @@ class WindowTitle:
         self.point2 = None
 
     def get_window(self):
-        return pygetwindow.getWindowsWithTitle(self.name)[0]
+        try:
+            return pygetwindow.getWindowsWithTitle(self.name)[0]
+        except:
+            return None
 
-    def get_titles_list(self):
-        return pygetwindow.getAllTitles()
+    @staticmethod
+    def get_titles_list():
+        try:
+            return pygetwindow.getAllTitles()
+        except:
+            return None
 
     def take_screenshot_of_window(self, path: str):
         window = pygetwindow.getWindowsWithTitle(self.name)[0]
