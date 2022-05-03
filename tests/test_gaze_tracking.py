@@ -21,7 +21,6 @@ class TestGazeTracking(unittest.TestCase):
         self.frame_closed = np.array(image)
         image.close()
 
-
     # This test also test the Eye.py by default
     def test_refresh_frame(self):
         self.gazetracker.refresh(self.frame)
@@ -101,6 +100,7 @@ class TestGazeTracking(unittest.TestCase):
         self.assertIsNotNone(left_pupil_x)
         self.assertIsNotNone(right_pupil_y)
         self.assertIsNotNone(right_pupil_x)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -3,7 +3,6 @@ from src.window_title import WindowTitle
 
 
 class TestWindowTitle(unittest.TestCase):
-
     def test_get_window_titles(self):
         titles = WindowTitle.get_titles_list()
         print(titles)
@@ -18,6 +17,5 @@ class TestWindowTitle(unittest.TestCase):
         self.assertEqual(captured, None)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
