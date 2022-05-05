@@ -22,12 +22,12 @@ class Eye(object):
     def middle_point(p1, p2):
         """
         Computes the middle point between two points.
-        
+
         Args:
             p1 (dlib.point): First point.
             p2 (dlib.point): Second point.
-        
-        Returns: 
+
+        Returns:
             The middle point (x,y) between two points.
         """
         x = int((p1.x + p2.x) / 2)
@@ -84,9 +84,7 @@ class Eye(object):
         left = (landmarks.part(points[0]).x, landmarks.part(points[0]).y)
         right = (landmarks.part(points[3]).x, landmarks.part(points[3]).y)
         top = self.middle_point(landmarks.part(points[1]), landmarks.part(points[2]))
-        bottom = self.middle_point(
-            landmarks.part(points[5]), landmarks.part(points[4])
-        )
+        bottom = self.middle_point(landmarks.part(points[5]), landmarks.part(points[4]))
 
         eye_width = math.hypot((left[0] - right[0]), (left[1] - right[1]))
         eye_height = math.hypot((top[0] - bottom[0]), (top[1] - bottom[1]))

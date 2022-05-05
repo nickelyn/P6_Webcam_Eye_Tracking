@@ -16,7 +16,7 @@ class Calibration(object):
 
     def is_complete(self):
         """
-        Returns: 
+        Returns:
             True, if the calibration is completed.
         """
         return (
@@ -28,8 +28,8 @@ class Calibration(object):
         """
         Args:
             side: Indicates whether it's the left eye (0) or the right eye (1).
-        
-        Returns: 
+
+        Returns:
             The threshold value for the given eye.
         """
         if side == 0:
@@ -42,7 +42,7 @@ class Calibration(object):
         """
         Args:
             frame (numpy.ndarray): Binarized iris frame.
-        Returns: 
+        Returns:
             The percentage of space that the iris takes up on the surface of the eye.
         """
         frame = frame[5:-5, 5:-5]
