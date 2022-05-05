@@ -1,24 +1,22 @@
-import configparser
 import io
 import sys
-import argparse
 
-import keyboard as kb
-import pygetwindow
 from gui import *
 from PIL import Image
+import keyboard as kb
+import pygetwindow
+import platform as p
+
 from popup import PopUp
 from camera import *
-from eyegaze import *
-import gaze as gz
 from gaze import Gaze
 from gazetracker.gaze_tracking import GazeTracking
 from gaze_calculator.monitor_calculator import Monitor
 from gaze_calculator.boxes import Box
 from gaze_calculator.heatmapper import Heatmap
-import platform as p
 from window_title import WindowTitle
 from settings import Settings
+import gaze as gz
 
 # Necessary to traverse up the directory tree
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -357,6 +355,5 @@ if __name__ == "__main__":
 
     gui.window["SIZETEXT"].update(f"Screen size: {monitor_size} inches")
     cam = Camera(device)
-    # intialise_heatmap_array(32)
 
     main(monitor_size)

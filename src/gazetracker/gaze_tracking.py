@@ -1,6 +1,6 @@
 import os
 import sys
-import cv2
+import cv2 as cv
 import dlib
 
 from .eye import Eye
@@ -41,7 +41,7 @@ class GazeTracking(object):
 
     def _analyze(self):
         """Detects the face and initialize Eye objects"""
-        frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
+        frame = cv.cvtColor(self.frame, cv.COLOR_BGR2GRAY)
         faces = self._face_detector(frame)
 
         try:
@@ -140,9 +140,9 @@ class GazeTracking(object):
             color = (0, 255, 0)
             x_left, y_left = self.get_pupil_coords_left()
             x_right, y_right = self.get_pupil_coords_right()
-            cv2.line(frame, (x_left - 5, y_left), (x_left + 5, y_left), color)
-            cv2.line(frame, (x_left, y_left - 5), (x_left, y_left + 5), color)
-            cv2.line(frame, (x_right - 5, y_right), (x_right + 5, y_right), color)
-            cv2.line(frame, (x_right, y_right - 5), (x_right, y_right + 5), color)
+            cv.line(frame, (x_left - 5, y_left), (x_left + 5, y_left), color)
+            cv.line(frame, (x_left, y_left - 5), (x_left, y_left + 5), color)
+            cv.line(frame, (x_right - 5, y_right), (x_right + 5, y_right), color)
+            cv.line(frame, (x_right, y_right - 5), (x_right, y_right + 5), color)
 
         return frame

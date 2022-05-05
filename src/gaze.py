@@ -24,7 +24,7 @@ class Gaze:
         self.grey = None
         self.detector = dlib.get_frontal_face_detector()
         self.predictor = dlib.shape_predictor(
-            os.path.join(DATA_DIR, "shape_predictor_68_face_landmarks.dat")
+            os.path.join(DATA_DIR, "models/shape_predictor_68_face_landmarks.dat")
         )
         self.distance_detector = DistanceDetector()
         self.ref_image = cv.imread(os.path.join(DATA_DIR, "images/ref_image_new.jpg"))
