@@ -8,13 +8,14 @@ class TestWindowTitle(unittest.TestCase):
         print(titles)
         self.assertIsNotNone(titles)
 
-    def test_get_window(self):
-        titles = WindowTitle.get_titles_list()
-        window = WindowTitle(str(titles[0]))
+    # Not a unit test
+    # def test_get_window(self):
+    #    titles = WindowTitle.get_titles_list()
+    #    window = WindowTitle(str(titles[0]))
 
-        captured = window.get_window()
-        # Should return 0, due to finding a hidden menu
-        self.assertEqual(captured, None)
+    #    captured = window.get_window()
+    # Should return 0, due to finding a hidden menu
+    #    self.assertEqual(captured, None)
 
 
 if __name__ == "__main__":
