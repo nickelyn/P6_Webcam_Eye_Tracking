@@ -151,7 +151,7 @@ cython_debug/
 
 
 /resources/*
-
+settings.cfg
 
 # ExtraCoverage 
 config-3.py

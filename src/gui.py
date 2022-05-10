@@ -144,7 +144,8 @@ class Gui:
             auto_size_buttons=True,
             resizable=False,
             font=DEFAULT_FONT,
-        )
+        ).finalize()
+        window.maximize()
         return window
 
     def __init__(self) -> None:

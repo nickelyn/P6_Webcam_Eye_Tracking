@@ -24,8 +24,8 @@ parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)
 from definitions import *
 
-IMG_SIZE_W = 400
-IMG_SIZE_H = 400
+IMG_SIZE_W = 640
+IMG_SIZE_H = 480
 
 
 def calibrate_monitor(screen_size: int):
@@ -38,9 +38,9 @@ def calibrate_monitor(screen_size: int):
     return monitor
 
 
-def intialise_heatmap_array(box_amt: int):
-    ha = [[0 for x in range(box_amt + 1)] for i in range(box_amt + 1)]
-    return ha
+def init_heatmap_arr(box_amt: int):
+    heatmap_arr = [[0 for x in range(box_amt + 1)] for i in range(box_amt + 1)]
+    return heatmap_arr
 
 
 def main(screen_size: int):
@@ -88,9 +88,10 @@ def main(screen_size: int):
             gz.handle_faces(
                 gaze,
                 frame,
+                # TypeError: 'NoneType' object is not subscriptable
                 lle=values[
                     "_LELINES_"
-                ],  # TypeError: 'NoneType' object is not subscriptable
+                ],
                 lre=values["_RELINES_"],
                 closed=values["_EYECLOSED_"],
                 outline=values["_OUTLINE_"],
@@ -310,7 +311,7 @@ def main(screen_size: int):
                     heatmap = Heatmap(data=heatmap_array, length=box.box_amount + 1)
                     generate_heatmap = not generate_heatmap
                 else:
-                    heatmap_array = intialise_heatmap_array(box_amt=box.box_amount)
+                    heatmap_array = init_heatmap_arr(box_amt=box.box_amount)
                     generate_heatmap = not generate_heatmap
 
         if event == "Apply":
