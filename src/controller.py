@@ -1,4 +1,5 @@
 import io
+import os
 import sys
 
 from gui import *
@@ -69,9 +70,7 @@ def main(screen_size: int):
     while True:
         event, values = gui.window.read(timeout=20)
 
-        if titles_found:
-            pass
-        else:
+        if not titles_found:
             titles_list = WindowTitle.get_titles_list()
             if p.system() != "Darwin":
                 for title in titles_list:
@@ -297,7 +296,7 @@ def main(screen_size: int):
                 sentinel += 1
 
         # TODO: Toggle off the Apply Event, otherwise the Record event cant be accessed
-        elif event == "_RECORDING_":
+        if event == "_RECORDING_":
             if not initial_calibration:
                 gui.popup(dialogue.get(4))
             else:
@@ -309,13 +308,12 @@ def main(screen_size: int):
 
                 if generate_heatmap:
                     heatmap = Heatmap(data=heatmap_array, length=box.box_amount + 1)
-                    print(heatmap_array)
                     generate_heatmap = not generate_heatmap
                 else:
                     heatmap_array = intialise_heatmap_array(box_amt=box.box_amount)
                     generate_heatmap = not generate_heatmap
 
-        elif event == "Apply":
+        if event == "Apply":
             if capture_window:
                 capture_window = False
             else:
@@ -330,7 +328,7 @@ if __name__ == "__main__":
     gui = Gui()
     settings = Settings()
 
-    # TODO: Check for illegal input.
+
     if settings.config.has_option("SETTINGS", "monitor_size"):
         monitor_size = int(settings.get_setting("SETTINGS", "monitor_size"))
     if settings.config.has_option("SETTINGS", "camera_type"):
@@ -353,7 +351,6 @@ if __name__ == "__main__":
         with open("settings.cfg", "w") as configfile:
             settings.config.write(configfile)
 
-    gui.window["SIZETEXT"].update(f"Screen size: {monitor_size} inches")
     cam = Camera(device)
 
     main(monitor_size)
