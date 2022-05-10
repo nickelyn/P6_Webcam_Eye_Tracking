@@ -61,7 +61,7 @@ def main(screen_size: int):
     right_val = 0
     left_val = 0
     heatmap_array = []
-    
+
     gaze = Gaze()
     gaze.find_ref_image_width()
     gaze_tracking = GazeTracking()
@@ -69,7 +69,7 @@ def main(screen_size: int):
 
     # Event Loop
     while True:
-        event, values = gui.window.read(timeout = 0)
+        event, values = gui.window.read(timeout=0)
 
         if not titles_found:
             titles_list = WindowTitle.get_titles_list()
@@ -256,7 +256,7 @@ def main(screen_size: int):
                 cam.is_showing = False
                 gui.window["frame"].update(visible=False)
 
-        if capture_window: # TODO: Implement actual screen capture. lmao.
+        if capture_window:  # TODO: Implement actual screen capture. lmao.
             dir = os.path.join(RESOURCES_DIR, "windowfeed")
             file_name = "windowfeed.png"
             path = os.path.join(dir, file_name)
