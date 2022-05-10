@@ -328,7 +328,6 @@ if __name__ == "__main__":
     gui = Gui()
     settings = Settings()
 
-
     if settings.config.has_option("SETTINGS", "monitor_size"):
         monitor_size = int(settings.get_setting("SETTINGS", "monitor_size"))
     if settings.config.has_option("SETTINGS", "camera_type"):
