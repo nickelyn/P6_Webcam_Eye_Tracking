@@ -89,9 +89,7 @@ def main(screen_size: int):
                 gaze,
                 frame,
                 # TypeError: 'NoneType' object is not subscriptable
-                lle=values[
-                    "_LELINES_"
-                ],
+                lle=values["_LELINES_"],
                 lre=values["_RELINES_"],
                 closed=values["_EYECLOSED_"],
                 outline=values["_OUTLINE_"],
