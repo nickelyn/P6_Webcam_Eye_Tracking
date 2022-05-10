@@ -49,9 +49,9 @@ class Gui:
         DEFAULT_FONT = "Dosis 10"
         sg.theme(THEME)
 
-        camera_feed = [[sg.Image(filename="", key="frame")]]
+        camera_feed = [[sg.Image(filename="", key="frame", visible=False)]]
 
-        window_feed = [[sg.Image(filename="", key="window")]]
+        window_feed = [[sg.Image(filename="", key="window", visible=True)]]
 
         toggle = [
             [sg.Text("Webcam", font=HEADER_FONT)],

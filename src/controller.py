@@ -44,31 +44,32 @@ def init_heatmap_arr(box_amt: int):
 
 
 def main(screen_size: int):
-    toggle = False
     titles_found = False
+    toggle = False
     capture_window = False
     initial_calibration = False
-    sentinel = 0
-    gaze = Gaze()
-    gaze.find_ref_image_width()
-    gaze_tracking = GazeTracking()
+    recording = False
     upper_left = False
     lower_right = False
     rightmost = False
     leftmost = False
+    generate_heatmap = False
+    box = None
+    sentinel = 0
     upper_val = 0
     lower_val = 0
     right_val = 0
     left_val = 0
-    monitor = calibrate_monitor(screen_size)
-    box = None
-    recording = False
     heatmap_array = []
-    generate_heatmap = False
+    
+    gaze = Gaze()
+    gaze.find_ref_image_width()
+    gaze_tracking = GazeTracking()
+    monitor = calibrate_monitor(screen_size)
 
     # Event Loop
     while True:
-        event, values = gui.window.read(timeout=20)
+        event, values = gui.window.read(timeout = 0)
 
         if not titles_found:
             titles_list = WindowTitle.get_titles_list()
@@ -81,7 +82,7 @@ def main(screen_size: int):
             gui.window["SELECT"].update(values=titles_list, visible=True)
             titles_found = True
 
-        if cam.is_recording:
+        if cam.is_showing:
             _, frame = cam.capture.read()
 
             gaze = gz.prepare_gaze_object(gaze, frame)
@@ -240,7 +241,7 @@ def main(screen_size: int):
                     )
 
             imgbytes = cv.imencode(".png", frame)[1].tobytes()
-            gui.window["window"].update(data=imgbytes)
+            gui.window["frame"].update(data=imgbytes)
 
         if event == "_TOGGLE_":
             toggle = not toggle
@@ -249,13 +250,13 @@ def main(screen_size: int):
                 button_color=(("white", ("green", "red")[toggle])),
             )
             if toggle:
-                cam.is_recording = True
-                cam.setsize(IMG_SIZE_W, IMG_SIZE_H)
+                cam.is_showing = True
+                gui.window["frame"].update(visible=True)
+            else:
+                cam.is_showing = False
+                gui.window["frame"].update(visible=False)
 
-            elif not toggle:
-                cam.is_recording = False
-
-        if capture_window:
+        if capture_window: # TODO: Implement actual screen capture. lmao.
             dir = os.path.join(RESOURCES_DIR, "windowfeed")
             file_name = "windowfeed.png"
             path = os.path.join(dir, file_name)
@@ -269,7 +270,7 @@ def main(screen_size: int):
                         img.thumbnail((200, 200))
                         bio = io.BytesIO()
                         img.save(bio, format="PNG")
-                        gui.window["frame"].update(data=bio.getvalue())
+                        gui.window["window"].update(data=bio.getvalue())
                         sentinel = 0
                     except FileNotFoundError:
                         print(f"MacOS: {dialogue.get(6)}")
@@ -284,10 +285,10 @@ def main(screen_size: int):
                         path = os.path.join(dir, file_name)
                         window.take_screenshot_of_window(path)
                         img = Image.open(path)
-                        img.thumbnail((400, 400))  # TODO: Implement size scaling
+                        img.thumbnail((200, 200))  # TODO: Implement size scaling
                         bio = io.BytesIO()
                         img.save(bio, format="PNG")
-                        gui.window["frame"].update(data=bio.getvalue())
+                        gui.window["window"].update(data=bio.getvalue())
                         sentinel = 0
                     except FileNotFoundError:
                         print(f"Windows: {dialogue.get(6)}")
@@ -348,7 +349,6 @@ if __name__ == "__main__":
         # TODO: Possible file permissions error when bundled.
         with open("settings.cfg", "w") as configfile:
             settings.config.write(configfile)
-
     cam = Camera(device)
 
     main(monitor_size)

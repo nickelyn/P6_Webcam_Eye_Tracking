@@ -12,7 +12,7 @@ class Camera:
         else:
             self.capture = cv.VideoCapture(device, cv.CAP_DSHOW)
 
-        self.is_recording = False
+        self.is_showing = False
 
         if not self.capture.isOpened():
             sys.exit()
