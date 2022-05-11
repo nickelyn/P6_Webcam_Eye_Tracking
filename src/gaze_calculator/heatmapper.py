@@ -14,5 +14,5 @@ def produce_heatmap(data: list, aspect: list):
     plt.figure(figsize=(aspect[0], aspect[1]), dpi=80)
     heatmap = sns.heatmap(np.array(data), linewidth=1, annot=True)
     plt.title("Heatmap Using Seaborn Method")
-    #plt.show()
-    plt.savefig('ProducedHeatmap.png', dpi=1000)
+    # plt.show()
+    plt.savefig("ProducedHeatmap.png", dpi=1000)

@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 
+
 class Loading:
     def make_window(self, stage_txt: str):
         THEME = "Dark Grey"
@@ -9,7 +10,6 @@ class Loading:
         window = sg.Window("Loading", layout, size=(290, 50), keep_on_top=True)
 
         self.window = window
-
 
     def __init__(self, stage: str):
         self.window = None
