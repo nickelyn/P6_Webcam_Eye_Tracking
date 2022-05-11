@@ -144,12 +144,13 @@ def main(screen_size: int):
                                 ver_ratio=gaze_tracking.vert_ratio(),
                                 hor_ratio=gaze_tracking.hori_ratio(),
                             )
-                            vert_val = actual_box[0]
-                            hori_val = actual_box[1]
-                            # count the array up
-                            heatmap_array[vert_val][hori_val] = (
-                                heatmap_array[vert_val][hori_val] + 1
-                            )
+                            if actual_box is not None:
+                                vert_val = actual_box[0]
+                                hori_val = actual_box[1]
+                                # count the array up
+                                heatmap_array[vert_val][hori_val] = (
+                                    heatmap_array[vert_val][hori_val] + 1
+                                )
                 else:
                     if upper_left is not True:
                         cv.putText(
@@ -231,6 +232,7 @@ def main(screen_size: int):
                             monitor=monitor,
                             bounds=[upper_val, lower_val, left_val, right_val],
                         )
+                        intialise_heatmap_array(box.box_amount)
                         initial_calibration = True
 
                     gui.window["UPPERBOUND"].update(value=f"Upper bound = {upper_val}")
@@ -307,7 +309,7 @@ def main(screen_size: int):
                 )
 
                 if generate_heatmap:
-                    heatmap = Heatmap(data=heatmap_array, length=box.box_amount + 1)
+                    heatmap = Heatmap(data=heatmap_array, aspect_ratio=monitor.aspect_ratio)
                     generate_heatmap = not generate_heatmap
                 else:
                     heatmap_array = intialise_heatmap_array(box_amt=box.box_amount)
