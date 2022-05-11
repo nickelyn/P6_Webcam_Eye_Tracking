@@ -22,6 +22,8 @@ class Box:
         self.hor_box_index = self.hor_difference / self.box_amount
 
     def determine_actual_boxes(self, ver_ratio, hor_ratio):
+        if ver_ratio is None or hor_ratio is None:
+            return None
         if ver_ratio > self.lower:
             ver_ratio = self.lower
         elif ver_ratio < self.upper:
