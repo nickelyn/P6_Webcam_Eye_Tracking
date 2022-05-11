@@ -309,7 +309,9 @@ def main(screen_size: int):
                 )
 
                 if generate_heatmap:
-                    heatmap = Heatmap(data=heatmap_array, aspect_ratio=monitor.aspect_ratio)
+                    heatmap = Heatmap(
+                        data=heatmap_array, aspect_ratio=monitor.aspect_ratio
+                    )
                     generate_heatmap = not generate_heatmap
                 else:
                     heatmap_array = intialise_heatmap_array(box_amt=box.box_amount)
