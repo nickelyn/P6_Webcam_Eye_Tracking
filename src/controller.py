@@ -351,7 +351,7 @@ if __name__ == "__main__":
         settings.config["SETTINGS"]["camera_type"] = str(device)
         settings.config["SETTINGS"]["monitor_size"] = str(monitor_size)
         # TODO: Possible file permissions error when bundled.
-        with open("settings.cfg", "w") as configfile:
+        with open(CONFIG_DIR, "w") as configfile:
             settings.config.write(configfile)
 
     cam = Camera(device)
