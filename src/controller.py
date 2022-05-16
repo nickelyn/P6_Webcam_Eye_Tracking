@@ -144,7 +144,7 @@ def main(screen_size: int):
                                 ver_ratio=gaze_tracking.vert_ratio(),
                                 hor_ratio=gaze_tracking.hori_ratio(),
                             )
-                            if actual_box is not None:
+                            if actual_box is not None and gaze_tracking.vert_ratio() is not None:
                                 vert_val = actual_box[0]
                                 hori_val = actual_box[1]
                                 # count the array up
@@ -201,7 +201,7 @@ def main(screen_size: int):
                         )
                         if (
                             kb.is_pressed("e")
-                            and gaze_tracking.hori_ratio() is not None
+                            and gaze_tracking.vert_ratio() is not None
                         ):
                             leftmost = True
                             left_val = float(
@@ -220,7 +220,7 @@ def main(screen_size: int):
                         )
                         if (
                             kb.is_pressed("r")
-                            and gaze_tracking.hori_ratio() is not None
+                            and gaze_tracking.vert_ratio() is not None
                         ):
                             rightmost = True
                             right_val = float(
@@ -232,7 +232,7 @@ def main(screen_size: int):
                             monitor=monitor,
                             bounds=[upper_val, lower_val, left_val, right_val],
                         )
-                        intialise_heatmap_array(box.box_amount)
+                        heatmap_array = intialise_heatmap_array(box.box_amount)
                         initial_calibration = True
 
                     gui.window["UPPERBOUND"].update(value=f"Upper bound = {upper_val}")
@@ -303,14 +303,14 @@ def main(screen_size: int):
                 gui.popup(dialogue.get(4))
             else:
                 recording = not recording
-                gui.window.Element("_RECORDING_").Update(
+                gui.window.Element("_RECORDING_").Update(##########X
                     ("RECORD", "STOP")[recording],
                     button_color=(("dark green", "red")[recording], "grey44"),
                 )
 
                 if generate_heatmap:
                     heatmap = Heatmap(
-                        data=heatmap_array, aspect_ratio=monitor.aspect_ratio
+                        data=heatmap_array, monitor=monitor, name="ProducedHeatmap.png"
                     )
                     generate_heatmap = not generate_heatmap
                 else:
