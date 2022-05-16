@@ -14,5 +14,5 @@ To run the code, be in the project directory and run `python src/controller.py`.
 
 ## Code Coverage
 To generate a coverage report, start by installing `coverage` and `pytest` with `pip install coverage pytest`.
-1. run `coverage run -m pytest`
-2. run `coverage html --omit="tests/*,config*,*__init__.*"` (or coverage report, for more information: [view documentation](https://coverage.readthedocs.io/en/6.3.3/)
+1. Run `coverage run -m pytest`
+2. Run `coverage html --omit="tests/*,config*,*__init__.*"` (or you can use `coverage report`). For more information: [view documentation](https://coverage.readthedocs.io/en/6.3.3/)
