@@ -97,7 +97,7 @@ class Gui:
 
         left_col = [
             [sg.Text("Features", size=(20, 1), font=HEADER_FONT)],
-            #[sg.Input(size=(25, 1), focus=False), sg.Image(search_icon)],
+            # [sg.Input(size=(25, 1), focus=False), sg.Image(search_icon)],
             [sg.Checkbox("Generate Heatmap", default=False, key="_HEATMAP_")],
             [sg.Checkbox("Left eye lines", default=False, key="_LELINES_")],
             [sg.Checkbox("Right eye lines", default=False, key="_RELINES_")],

@@ -14,6 +14,7 @@ RIGHT = 0.6
 LEFT = 0.917
 VIDEO_PATH = os.path.join(DATA_DIR, "videos/benchmark-video.mp4")
 
+
 def _calibrate_monitor(screen_size: int):
     monitor = Monitor(screen_size)
     monitor.pixels_height = 1440
@@ -24,14 +25,15 @@ def _calibrate_monitor(screen_size: int):
 
     return monitor
 
+
 def intialise_heatmap_array(box_amt: int):
     ha = [[0 for x in range(box_amt + 1)] for i in range(box_amt + 1)]
     return ha
 
+
 def _benchmark():
     gaze_tracking = GazeTracking()
     monitor = _calibrate_monitor(SCREEN_SIZE)
-
 
     cap = cv.VideoCapture(VIDEO_PATH)
 
@@ -48,19 +50,19 @@ def _benchmark():
             continue
         gaze_tracking.refresh(frame)
         frame = gaze_tracking.annotated_frame()
-        if (gaze_tracking.hori_ratio() is None and gaze_tracking.vert_ratio() is None):
+        if gaze_tracking.hori_ratio() is None and gaze_tracking.vert_ratio() is None:
             continue
-        actual_box = box.determine_actual_boxes(ver_ratio=gaze_tracking.vert_ratio(), hor_ratio=gaze_tracking.hori_ratio())
+        actual_box = box.determine_actual_boxes(
+            ver_ratio=gaze_tracking.vert_ratio(), hor_ratio=gaze_tracking.hori_ratio()
+        )
         if actual_box is not None:
             vert_val = actual_box[0]
             hori_val = actual_box[1]
             # count the array up
-            heatmap_array[vert_val][hori_val] = (
-                    heatmap_array[vert_val][hori_val] + 1
-            )
+            heatmap_array[vert_val][hori_val] = heatmap_array[vert_val][hori_val] + 1
         count = count + 1
         pbar.update(1)
-        if (count > (video_length-1)):
+        if count > (video_length - 1):
             cap.release()
             break
 

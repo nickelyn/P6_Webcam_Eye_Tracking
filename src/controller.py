@@ -144,7 +144,10 @@ def main(screen_size: int):
                                 ver_ratio=gaze_tracking.vert_ratio(),
                                 hor_ratio=gaze_tracking.hori_ratio(),
                             )
-                            if actual_box is not None and gaze_tracking.vert_ratio() is not None:
+                            if (
+                                actual_box is not None
+                                and gaze_tracking.vert_ratio() is not None
+                            ):
                                 vert_val = actual_box[0]
                                 hori_val = actual_box[1]
                                 # count the array up
@@ -303,7 +306,7 @@ def main(screen_size: int):
                 gui.popup(dialogue.get(4))
             else:
                 recording = not recording
-                gui.window.Element("_RECORDING_").Update(##########X
+                gui.window.Element("_RECORDING_").Update(  ##########X
                     ("RECORD", "STOP")[recording],
                     button_color=(("dark green", "red")[recording], "grey44"),
                 )
