@@ -9,6 +9,10 @@ class Box:
             self.horizontal_bounds = 80
             self.vertical_bounds = 45
             self.box_amount = int(monitor.pixels_width / self.horizontal_bounds)
+        elif monitor.aspect_ratio == [16, 10]:
+            self.horizontal_bounds = 64
+            self.vertical_bounds = 40
+            self.box_amount = int(monitor.pixels_width / self.horizontal_bounds)
         else:
             print("Unknown ratio")
 

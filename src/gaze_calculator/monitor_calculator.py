@@ -25,6 +25,8 @@ class Monitor:
             self.aspect_ratio = [32, 9]
         elif ratio == 1.33:
             self.aspect_ratio = [4, 3]
+        elif ratio == 1.6:  # 16-inch MacBook 2019 model
+            self.aspect_ratio = [16, 10]
 
     def get_monitor_dimension(self):
         monitors = get_monitors()
@@ -32,11 +34,13 @@ class Monitor:
             if m.is_primary:
                 self.pixels_height = m.height
                 self.pixels_width = m.width
+                print(m.width)
+                print(m.height)
                 return
 
     def convert_pixels_to_size_inches(self):
         aspect_ratio = self.aspect_ratio[0] / self.aspect_ratio[1]
-        aspect = aspect_ratio**2
+        aspect = aspect_ratio ** 2
         aspect = aspect + 1
         aspect = math.sqrt(aspect)
         self.height = self.diagonal / aspect
