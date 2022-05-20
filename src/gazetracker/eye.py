@@ -11,8 +11,6 @@ class Eye(object):
 
     def __init__(self, original_frame, landmarks, side, calibration):
         self.frame = None
-        self.origin = None
-        self.center = None
         self.pupil = None
         self.landmark_points = None
 
@@ -43,31 +41,35 @@ class Eye(object):
             landmarks (dlib.full_object_detection): Facial landmarks for the face region.
             points (list): Points of an eye (from the 68 Multi-PIE landmarks).
         """
-        region = np.array(
-            [(landmarks.part(point).x, landmarks.part(point).y) for point in points]
-        )
-        region = region.astype(np.int32)
-        self.landmark_points = region
+        coords = np.zeros((68, 2), dtype="int")
+        for i in range(0, 68):
+            coords[i] = (cord.part(i).x, cord.part(i).y)
+
+        points = [coords[i] for i in side]
+        points = np.array(points, dtype=np.int32)
+        self.landmark_points = points
 
         # Apply mask to exclude everything but the eye
-        height, width = frame.shape[:2]
-        black_frame = np.zeros((height, width), np.uint8)
-        mask = np.full((height, width), 255, np.uint8)
-        cv.fillPoly(mask, [region], (0, 0, 0))
-        eye = cv.bitwise_not(black_frame, frame.copy(), mask=mask)
+        black_frame = np.zeros(frame.shape[:2], np.uint8)
+        conts, _ = cv2.findContours(points, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+
+        x, y, w, h = cv2.boundingRect(conts[0])
+
+        min_x = x - 5
+        max_x = x + w
+        min_y = y - 6
+        max_y = y + h + 3
+
+        points = np.array([[(x - 5), (y - 6)], [(x + w), (y - 6)], [(x + w), (y + 3 + h)], [(x - 5), (y + 3 + h)]],
+                          dtype=np.int32)
+        mask = cv2.fillConvexPoly(mask, points, 255)
+        cv2.dilate(mask, None, iterations=9)
+        eye = cv2.bitwise_and(black_frame, frame.copy(), mask=mask)
 
         # Cropping the eye
-        margin = 5
-        min_x = np.min(region[:, 0]) - margin
-        max_x = np.max(region[:, 0]) + margin
-        min_y = np.min(region[:, 1]) - margin
-        max_y = np.max(region[:, 1]) + margin
-
         self.frame = eye[min_y:max_y, min_x:max_x]
-        self.origin = (min_x, min_y)
 
         height, width = self.frame.shape[:2]
-        self.center = (width / 2, height / 2)
 
     def blinking_ratio(self, landmarks, points):
         """
