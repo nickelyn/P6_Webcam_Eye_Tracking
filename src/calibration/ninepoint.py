@@ -20,10 +20,11 @@ class NinePointCalibrator:
             (monitor.pixels_width / 2, monitor.pixels_height),
             (monitor.pixels_width, monitor.pixels_height),
         ]
+        """
         for i in range(0, len(self.locations)):
             print(self.locations[i])
             self.make_point(self.locations[i])
-
+        """
     def make_point(self, location):
         layout = [
             [
@@ -36,12 +37,12 @@ class NinePointCalibrator:
         self.window = sg.Window(
             "Window Title", layout, location=location, margins=(0, 0), finalize=True
         )
-        while True:
+        self.window.read()
 
-            event, values = self.window.read()
-            if event in (sg.WIN_CLOSED, "Exit"):
-                break
+
+    def set_none(self):
         self.window.close()
+        self.window = None
 
 
 def _calibrate_monitor(screen_size: int):

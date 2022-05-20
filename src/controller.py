@@ -1,12 +1,14 @@
 import io
 import os
 import sys
+import time
 
 from gui import *
 from PIL import Image
 import keyboard as kb
 import pygetwindow
 import platform as p
+import threading
 
 from popup import PopUp
 from camera import *
@@ -17,6 +19,7 @@ from gaze_calculator.boxes import Box
 from gaze_calculator.heatmapper import Heatmap
 from window_title import WindowTitle
 from settings import Settings
+from calibration.ninepoint import NinePointCalibrator
 import gaze as gz
 
 # Necessary to traverse up the directory tree
@@ -52,6 +55,10 @@ def main(screen_size: int):
     gaze = Gaze()
     gaze.find_ref_image_width()
     gaze_tracking = GazeTracking()
+    calibration_iterations = 0
+    calibration_popup = True
+    calibration_array = []
+    printer = True
     upper_left = False
     lower_right = False
     rightmost = False
@@ -101,36 +108,25 @@ def main(screen_size: int):
             if values["_NEWGAZE_"]:
                 gaze_tracking.refresh(frame)
                 frame = gaze_tracking.annotated_frame()
-                text = ""
 
-                if gaze_tracking.is_blinking():
-                    text = "Blinking"
-                elif gaze_tracking.is_right():
-                    text = "Looking right"
-                elif gaze_tracking.is_left():
-                    text = "Looking left"
-                elif gaze_tracking.is_center():
-                    text = "Looking center"
+                if not initial_calibration:
+                    if calibration_popup:
+                        gui.popup(dialogue.get(11))
+                        calibration_popup = False
+                    ninepoint = NinePointCalibrator(monitor=monitor)
+                    if calibration_iterations != len(ninepoint.locations):
+                        if ninepoint.window is None:
+                            ninepoint.make_point(ninepoint.locations[calibration_iterations])
+                            calibration_iterations = calibration_iterations + 1
+                            calibration_array.append({f"left: {gaze_tracking.get_pupil_coords_left()}", f"right: {gaze_tracking.get_pupil_coords_right()}"})
+                            threading.Timer(2.0, ninepoint.set_none())
+                    else:
+                        if printer:
+                            print(calibration_array)
+                            printer = False
 
-                cv.putText(
-                    frame,
-                    str(gaze_tracking.vert_ratio()),
-                    (20, 20),
-                    cv.FONT_HERSHEY_DUPLEX,
-                    0.5,
-                    (147, 58, 31),
-                    1,
-                )
-                cv.putText(
-                    frame,
-                    str(gaze_tracking.hori_ratio()),
-                    (40, 40),
-                    cv.FONT_HERSHEY_DUPLEX,
-                    0.5,
-                    (147, 58, 31),
-                    1,
-                )
 
+                """
                 if initial_calibration:
                     if recording:
                         if (
@@ -244,6 +240,7 @@ def main(screen_size: int):
                     gui.window["RIGHTBOUND"].update(
                         value=f"Rightmost bound = {right_val}"
                     )
+                    """
 
             imgbytes = cv.imencode(".png", frame)[1].tobytes()
             gui.window["window"].update(data=imgbytes)
