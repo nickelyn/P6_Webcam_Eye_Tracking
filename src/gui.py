@@ -20,7 +20,7 @@ dialogue = {
     8: "Look in the lower right corner and press 'W' on your keyboard",
     9: "Look at the left most side and press 'E' on your keyboard",
     10: "Look at the right most side and press 'R' on your keyboard",
-    11: "Press confirm to start the calibration process"
+    11: "Press confirm to start the calibration process",
 }
 
 exceptions = {
