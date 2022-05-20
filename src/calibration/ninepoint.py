@@ -25,6 +25,7 @@ class NinePointCalibrator:
             print(self.locations[i])
             self.make_point(self.locations[i])
         """
+
     def make_point(self, location):
         layout = [
             [
@@ -38,7 +39,6 @@ class NinePointCalibrator:
             "Window Title", layout, location=location, margins=(0, 0), finalize=True
         )
         self.window.read()
-
 
     def set_none(self):
         self.window.close()
