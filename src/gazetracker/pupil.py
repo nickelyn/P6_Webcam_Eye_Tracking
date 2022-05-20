@@ -25,7 +25,9 @@ class Pupil(object):
         Returns:
             A frame with a single element representing the iris.
         """
-        new_frame = cv2.adaptiveThreshold(eye_frame, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 3)
+        new_frame = cv2.adaptiveThreshold(
+            eye_frame, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 3
+        )
         new_frame = cv2.bilateralFilter(new_frame, 15, 75, 75)
 
         return new_frame
@@ -46,7 +48,7 @@ class Pupil(object):
 
         try:
             cMax = max(contours, key=cv2.contourArea)
-            for(i, ci) in enumerate(contours):
+            for (i, ci) in enumerate(contours):
                 if len(contours) > 1:
                     removeMax = [c for c in conts2 if c not in cMax]
                     irisContour = max(removeMax, key=cv2.contourArea)

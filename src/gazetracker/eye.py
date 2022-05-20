@@ -60,8 +60,15 @@ class Eye(object):
         min_y = y - 6
         max_y = y + h + 3
 
-        points = np.array([[(x - 5), (y - 6)], [(x + w), (y - 6)], [(x + w), (y + 3 + h)], [(x - 5), (y + 3 + h)]],
-                          dtype=np.int32)
+        points = np.array(
+            [
+                [(x - 5), (y - 6)],
+                [(x + w), (y - 6)],
+                [(x + w), (y + 3 + h)],
+                [(x - 5), (y + 3 + h)],
+            ],
+            dtype=np.int32,
+        )
         mask = cv2.fillConvexPoly(mask, points, 255)
         cv2.dilate(mask, None, iterations=9)
         eye = cv2.bitwise_and(black_frame, frame.copy(), mask=mask)
