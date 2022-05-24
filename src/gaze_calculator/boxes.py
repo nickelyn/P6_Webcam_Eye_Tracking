@@ -29,9 +29,9 @@ class Box:
         if xcoord is None or ycoord is None:
             return None
         if ycoord < self.lowery:
-            ver_ratio = self.lowery
+            ycoord = self.lowery
         elif ycoord > self.uppery:
-            ver_ratio = self.uppery
+            ycoord = self.uppery
 
         vertical_box = (ycoord - self.lowery) / self.ver_box_index
         if vertical_box < 0:
@@ -40,9 +40,9 @@ class Box:
         vertical_box = math.floor(vertical_box)
 
         if xcoord > self.upperx:
-            hor_ratio = self.upperx
+            xcoord = self.upperx
         elif xcoord < self.lowerx:
-            hor_ratio = self.lowerx
+            xcoord = self.lowerx
 
         horizontal_box = (xcoord - self.lowerx) / self.hor_box_index
         if horizontal_box < 0:
