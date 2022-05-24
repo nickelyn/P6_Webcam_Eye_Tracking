@@ -16,35 +16,35 @@ class Box:
         else:
             print("Unknown ratio")
 
-        self.upper = bounds[0]
-        self.lower = bounds[1]
-        self.left = bounds[2]
-        self.right = bounds[3]
-        self.ver_difference = compare_vertical(self.upper, self.lower)
-        self.hor_difference = compare_horizontal(self.left, self.right)
+        self.upperx = bounds[0][0]
+        self.uppery = bounds[0][1]
+        self.lowerx = bounds[1][0]
+        self.lowery = bounds[1][1]
+        self.ver_difference = compare_vertical(self.uppery, self.lowery)
+        self.hor_difference = compare_horizontal(self.lowerx, self.upperx)
         self.ver_box_index = self.ver_difference / self.box_amount
         self.hor_box_index = self.hor_difference / self.box_amount
 
-    def determine_actual_boxes(self, ver_ratio, hor_ratio):
-        if ver_ratio is None or hor_ratio is None:
+    def determine_actual_boxes(self, xcoord, ycoord):
+        if xcoord is None or ycoord is None:
             return None
-        if ver_ratio > self.lower:
-            ver_ratio = self.lower
-        elif ver_ratio < self.upper:
-            ver_ratio = self.upper
+        if ycoord < self.lowery:
+            ver_ratio = self.lowery
+        elif ycoord > self.uppery:
+            ver_ratio = self.uppery
 
-        vertical_box = (ver_ratio - self.upper) / self.ver_box_index
+        vertical_box = (ycoord - self.lowery) / self.ver_box_index
         if vertical_box < 0:
             vertical_box = vertical_box * -1
 
         vertical_box = math.floor(vertical_box)
 
-        if hor_ratio > self.left:
-            hor_ratio = self.left
-        elif hor_ratio < self.right:
-            hor_ratio = self.right
+        if xcoord > self.upperx:
+            hor_ratio = self.upperx
+        elif xcoord < self.lowerx:
+            hor_ratio = self.lowerx
 
-        horizontal_box = (hor_ratio - self.right) / self.hor_box_index
+        horizontal_box = (xcoord - self.lowerx) / self.hor_box_index
         if horizontal_box < 0:
             horizontal_box = horizontal_box * -1
         horizontal_box = math.floor(horizontal_box)
