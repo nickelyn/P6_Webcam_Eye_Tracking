@@ -56,7 +56,6 @@ class Calibration(object):
         except ZeroDivisionError:
             return 1
 
-
     @staticmethod
     def find_best_threshold(eye_frame):
         """

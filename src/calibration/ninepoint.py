@@ -39,7 +39,6 @@ class NinePointCalibrator:
             "Window Title", layout, location=location, margins=(0, 0), finalize=True
         )
 
-
         self.window.read()
 
     def set_none(self):

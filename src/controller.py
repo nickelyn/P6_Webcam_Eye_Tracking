@@ -120,7 +120,7 @@ def main(screen_size: int):
                                 ninepoint.make_point(
                                     ninepoint.locations[calibration_iterations]
                                 )
-                                
+
                                 calibration_array.append(
                                     {
                                         f"left: {gaze_tracking.get_pupil_coords_left()}",

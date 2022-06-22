@@ -56,7 +56,7 @@ class Pupil(object):
                     self.x = int(moments["m10"] / moments["m00"])
                     self.y = int(moments["m01"] / moments["m00"])
                     # TODO: Lav en toggle funktion sådan at man kan slå cirklen om iris fra / til
-                    #cv2.circle(image, (cx, cy), 5, (0, 225, 0), 1)
+                    # cv2.circle(image, (cx, cy), 5, (0, 225, 0), 1)
 
         except (IndexError, ZeroDivisionError):
             pass
