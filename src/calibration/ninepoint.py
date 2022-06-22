@@ -38,6 +38,8 @@ class NinePointCalibrator:
         self.window = sg.Window(
             "Window Title", layout, location=location, margins=(0, 0), finalize=True
         )
+
+
         self.window.read()
 
     def set_none(self):
@@ -56,5 +58,5 @@ def _calibrate_monitor(screen_size: int):
 
 
 if __name__ == "__main__":
-    monitor = _calibrate_monitor(16)
+    monitor = _calibrate_monitor(14)
     cal = NinePointCalibrator(monitor)

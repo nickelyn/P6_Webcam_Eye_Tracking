@@ -13,7 +13,7 @@ class Eye(object):
         self.frame = None
         self.pupil = None
         self.landmark_points = None
-
+        self.side = side
         self.analyse(original_frame, landmarks, side, calibration)
 
     @staticmethod
@@ -41,19 +41,25 @@ class Eye(object):
             landmarks (dlib.full_object_detection): Facial landmarks for the face region.
             points (list): Points of an eye (from the 68 Multi-PIE landmarks).
         """
+
         coords = np.zeros((68, 2), dtype="int")
         for i in range(0, 68):
-            coords[i] = (cord.part(i).x, cord.part(i).y)
+            coords[i] = (landmarks.part(i).x, landmarks.part(i).y)
 
-        points = [coords[i] for i in side]
+        if self.side == 0:
+            points = [coords[i] for i in self.LEFT_EYE_POINTS]
+        if self.side == 1:
+            points = [coords[i] for i in self.RIGHT_EYE_POINTS]
         points = np.array(points, dtype=np.int32)
         self.landmark_points = points
 
-        # Apply mask to exclude everything but the eye
-        black_frame = np.zeros(frame.shape[:2], np.uint8)
-        conts, _ = cv2.findContours(points, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+        frame2 = frame.copy()
 
-        x, y, w, h = cv2.boundingRect(conts[0])
+        # Apply mask to exclude everything but the eye
+        black_frame = np.zeros(frame2.shape[:2], np.uint8)
+        conts, _ = cv.findContours(frame2, cv.RETR_LIST, cv.CHAIN_APPROX_NONE)
+
+        x, y, w, h = cv.boundingRect(conts[0])
 
         min_x = x - 5
         max_x = x + w
@@ -69,9 +75,11 @@ class Eye(object):
             ],
             dtype=np.int32,
         )
-        mask = cv2.fillConvexPoly(mask, points, 255)
-        cv2.dilate(mask, None, iterations=9)
-        eye = cv2.bitwise_and(black_frame, frame.copy(), mask=mask)
+
+        mask = np.zeros(frame.shape[:2], dtype=np.uint8)
+        mask = cv.fillConvexPoly(mask, points, 255)
+        cv.dilate(mask, None, iterations=9)
+        eye = cv.bitwise_and(black_frame, frame2, mask=mask)
 
         # Cropping the eye
         self.frame = eye[min_y:max_y, min_x:max_x]
@@ -130,4 +138,4 @@ class Eye(object):
             calibration.evaluate(self.frame, side)
 
         threshold = calibration.threshold(side)
-        self.pupil = Pupil(self.frame, threshold)
+        self.pupil = Pupil(self.frame)

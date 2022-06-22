@@ -49,6 +49,8 @@ class GazeTracking(object):
             self.eye_left = Eye(frame, landmarks, 0, self.calibration)
             self.eye_right = Eye(frame, landmarks, 1, self.calibration)
 
+
+
         except IndexError:
             self.eye_left = None
             self.eye_right = None
@@ -65,15 +67,15 @@ class GazeTracking(object):
     def get_pupil_coords_left(self):
         """Returns the coordinates of the left pupil"""
         if self.pupils_located:
-            x = self.eye_left.origin[0] + self.eye_left.pupil.x
-            y = self.eye_left.origin[1] + self.eye_left.pupil.y
+            x = self.eye_left.pupil.x
+            y = self.eye_left.pupil.y
             return (x, y)
 
     def get_pupil_coords_right(self):
         """Returns the coordinates of the right pupil"""
         if self.pupils_located:
-            x = self.eye_right.origin[0] + self.eye_right.pupil.x
-            y = self.eye_right.origin[1] + self.eye_right.pupil.y
+            x = self.eye_right.pupil.x
+            y = self.eye_right.pupil.y
             return (x, y)
 
     def hori_ratio(self):

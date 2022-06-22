@@ -116,17 +116,19 @@ def main(screen_size: int):
                     ninepoint = NinePointCalibrator(monitor=monitor)
                     if calibration_iterations != len(ninepoint.locations):
                         if ninepoint.window is None:
-                            ninepoint.make_point(
-                                ninepoint.locations[calibration_iterations]
-                            )
-                            calibration_iterations = calibration_iterations + 1
-                            calibration_array.append(
-                                {
-                                    f"left: {gaze_tracking.get_pupil_coords_left()}",
-                                    f"right: {gaze_tracking.get_pupil_coords_right()}",
-                                }
-                            )
-                            threading.Timer(2.0, ninepoint.set_none())
+                            for i in range(0, 10):
+                                ninepoint.make_point(
+                                    ninepoint.locations[calibration_iterations]
+                                )
+                                
+                                calibration_array.append(
+                                    {
+                                        f"left: {gaze_tracking.get_pupil_coords_left()}",
+                                        f"right: {gaze_tracking.get_pupil_coords_right()}",
+                                    }
+                                )
+                            threading.Timer(5.0, ninepoint.set_none())
+
                     else:
                         if printer:
                             print(calibration_array)

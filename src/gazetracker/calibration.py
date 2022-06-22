@@ -49,7 +49,13 @@ class Calibration(object):
         height, width = frame.shape[:2]
         nb_pixels = height * width
         nb_blacks = nb_pixels - cv.countNonZero(frame)
-        return nb_blacks / nb_pixels
+        try:
+            ret = nb_blacks / nb_pixels
+            return ret
+
+        except ZeroDivisionError:
+            return 1
+
 
     @staticmethod
     def find_best_threshold(eye_frame):
@@ -66,7 +72,7 @@ class Calibration(object):
         trials = {}
 
         for threshold in range(5, 100, 5):
-            iris_frame = Pupil.image_processing(eye_frame, threshold)
+            iris_frame = Pupil.image_processing(eye_frame)
             trials[threshold] = Calibration.iris_size(iris_frame)
 
         best_threshold, iris_size = min(
